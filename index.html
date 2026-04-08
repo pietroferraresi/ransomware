@@ -3,808 +3,631 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ransomware & Critical Infrastructure // PP255</title>
+<title>Ransomware &amp; Critical Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f4f1eb;--bg2:#fff;--bg3:#eae7e0;--surface:#fff;
-  --text:#3a3632;--text-hi:#141210;--text-lo:#8a857d;
-  --red:#9e2a0f;--red-dim:#9e2a0f12;--green:#4a7;--amber:#d4a;
-  --rule:#d5d0c8;--rule-hi:#c0bbb2;--blue:#2456a4;--teal:#1a7a6d;--amber:#b8860b;--blue-dim:#2456a415;--teal-dim:#1a7a6d12;--amber-dim:#b8860b12;
-  --mono:'Courier New','Courier',monospace;
+  --bg:#f5f2ec;--wh:#fff;--ink:#1a1714;--ink2:#3d3833;--ink3:#6e6960;
+  --red:#9e2a0f;--blue:#2456a4;--teal:#1a7a6d;--green:#2d7d46;--amber:#a67c00;
+  --rule:#d5d0c8;
+  --serif:'Source Serif 4',Georgia,serif;--sans:'DM Sans',sans-serif;--mono:'Courier New',monospace;
   --col:720px;--wide:1000px;
 }
-html{font-size:16.5px;scroll-behavior:smooth}
-body{font-family:var(--mono);color:var(--text);background:var(--bg);line-height:1.75}
-a{color:var(--red);text-decoration:none}
-a:hover{text-decoration:underline;color:#e74c3c}
-::selection{background:var(--red);color:#fff}
+html{font-size:18.5px;scroll-behavior:smooth}
+body{font-family:var(--serif);color:var(--ink2);background:var(--bg);line-height:1.8}
+a{color:var(--red)}a:hover{text-decoration:underline}
+::selection{background:var(--green);color:#fff}
 img{max-width:100%;display:block}
 
-/* scrollbar */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:#c0bbb2}
+.nav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--rule);font-family:var(--mono)}
+.nav-i{max-width:var(--wide);margin:0 auto;padding:.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:.85rem;font-weight:700;color:var(--ink);text-decoration:none;cursor:pointer}
+.nav-logo span{color:var(--green)}
+.nl{list-style:none;display:flex;gap:.15rem}
+.nl a{font-size:.8rem;color:var(--ink3);padding:.3rem .6rem;border:1px solid transparent;cursor:pointer;transition:.12s;text-decoration:none}
+.nl a:hover{color:var(--ink);border-color:var(--rule);text-decoration:none}
+.nl a.on{color:var(--green);border-color:var(--green);background:#2d7d4610}
+.hb{display:none;background:none;border:1px solid var(--rule);cursor:pointer;padding:.25rem .5rem;font-family:var(--mono);font-size:.8rem;color:var(--ink3)}
+@media(max-width:720px){.hb{display:block}.nl{display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--rule);flex-direction:column;padding:.6rem 1.5rem;gap:0}.nl.show{display:flex}.nl a{display:block;border:none;padding:.45rem 0}}
 
-/* NAV */
-.nav{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--rule)}
-.nav-i{max-width:var(--wide);margin:0 auto;padding:.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{color:var(--text-lo);font-size:.8rem;cursor:pointer;text-decoration:none;letter-spacing:.05em}
-.nav-logo:hover{color:var(--text)}
-.nav-logo span{color:var(--red)}
-.nl{list-style:none;display:flex;gap:.2rem}
-.nl a{color:var(--text-lo);font-size:.72rem;padding:.35rem .65rem;border:1px solid transparent;cursor:pointer;transition:.15s;letter-spacing:.03em}
-.nl a:hover{color:var(--text);border-color:var(--rule-hi);text-decoration:none}
-.nl a.on{color:var(--red);border-color:var(--red-dim);background:var(--red-dim)}
-.hb{display:none;background:none;border:1px solid var(--rule);cursor:pointer;padding:.3rem .5rem;color:var(--text-lo);font-family:var(--mono);font-size:.75rem}
-.hb:hover{border-color:var(--text-lo)}
-@media(max-width:700px){
-  .hb{display:block}
-  .nl{display:none;position:absolute;top:100%;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--rule);flex-direction:column;padding:.5rem 1.5rem;gap:0}
-  .nl.show{display:flex}
-  .nl a{display:block;border:none;padding:.5rem 0}
-}
-
-/* PAGES */
 .pg{display:none}.pg.live{display:block}
 
-/* HERO */
-.hero{padding:6rem 1.5rem 4rem;border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 1.75rem,var(--rule) 1.75rem,var(--rule) calc(1.75rem + 1px));opacity:.08;pointer-events:none}
-.hero-i{max-width:680px;margin:0 auto;position:relative;z-index:1}
-.hero-tag{font-size:.65rem;color:var(--red);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.5rem}
-.hero h1{font-size:clamp(1.8rem,4.5vw,3rem);color:var(--text-hi);line-height:1.15;letter-spacing:-.01em;font-weight:400}
-.hero h1 em{font-style:normal;color:var(--red)}
-.hero-sub{font-size:1.05rem;color:var(--text-lo);margin-top:.8rem;font-style:italic}
-.hero-meta{font-size:.7rem;color:var(--text-lo);margin-top:2rem;padding-top:1rem;border-top:1px solid var(--rule)}
+.hero{padding:4.5rem 1.5rem 3rem;border-bottom:1px solid var(--rule)}
+.hero-i{max-width:var(--col);margin:0 auto}
+.hero-tag{font-family:var(--mono);font-size:.82rem;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem}
+.hero h1{font-size:clamp(2rem,5vw,3rem);color:var(--ink);line-height:1.15;font-weight:700}
+.hero-sub{font-size:1.15rem;color:var(--ink3);margin-top:.5rem;line-height:1.6}
+.hero-by{font-family:var(--mono);font-size:.85rem;color:var(--ink3);margin-top:1.3rem;padding-top:.8rem;border-top:1px solid var(--rule)}
 
-/* SECTIONS */
-.s{padding:3rem 1.5rem;border-bottom:1px solid var(--rule)}
+.ph{padding:3.5rem 1.5rem 2rem;border-bottom:1px solid var(--rule)}
+.ph-i{max-width:var(--col);margin:0 auto}
+.ph h1{font-size:clamp(1.6rem,4vw,2.4rem);color:var(--ink);font-weight:700;line-height:1.2;margin-top:.4rem}
+.ph .desc{color:var(--ink2);margin-top:.6rem;font-size:1.08rem;max-width:580px;line-height:1.7}
+
+.s{padding:2.8rem 1.5rem;border-bottom:1px solid var(--rule)}
 .si{max-width:var(--col);margin:0 auto}.si.w{max-width:var(--wide)}
-.tag{font-size:.6rem;color:var(--red);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem}
-.s h2{font-size:1.15rem;color:var(--text-hi);font-weight:400;margin-bottom:1.2rem;line-height:1.35}
-.s h2::before{content:'# ';color:var(--red);opacity:.6}
-.s h3{font-size:.85rem;color:var(--text-hi);font-weight:700;margin:1.8rem 0 .4rem;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem}
+.tag{font-family:var(--mono);font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-bottom:.3rem}
+.tag.blue{color:var(--blue)}.tag.teal{color:var(--teal)}.tag.green{color:var(--green)}.tag.amber{color:var(--amber)}
+.s h2{font-family:var(--sans);font-size:1.5rem;color:var(--ink);font-weight:700;margin-bottom:1rem;line-height:1.3}
+.s h3{font-family:var(--sans);font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.4rem 0 .35rem}
 .s h3:first-of-type{margin-top:0}
-.s p{margin-bottom:.85rem;font-size:.88rem;line-height:1.8;color:var(--text)}
+.s p{margin-bottom:.85rem;font-size:1.05rem;line-height:1.82}
 .s p:last-child{margin-bottom:0}
-.s p strong{color:var(--text-hi);font-weight:700}
+.s p strong{color:var(--ink);font-weight:600}
 
-/* PAGE HEADER */
-.ph{padding:4rem 1.5rem 2rem;border-bottom:1px solid var(--rule);position:relative}
-.ph::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 1.75rem,var(--rule) 1.75rem,var(--rule) calc(1.75rem + 1px));opacity:.05;pointer-events:none}
-.ph-i{max-width:var(--col);margin:0 auto;position:relative;z-index:1}
-.ph .tag{margin-bottom:.5rem}
-.ph h1{font-size:clamp(1.5rem,3.5vw,2.2rem);color:var(--text-hi);font-weight:400;line-height:1.2}
-.ph .desc{color:var(--text-lo);margin-top:.8rem;font-size:.82rem;max-width:560px;line-height:1.7}
+.band{background:var(--ink);padding:2.5rem 1.5rem}
+.band p{font-family:var(--serif);font-size:1.25rem;color:var(--bg);text-align:center;max-width:600px;margin:0 auto;line-height:1.55;font-style:italic}
 
-/* DARK BAND */
-.band{background:var(--red);padding:2.5rem 1.5rem;border-bottom:none}
-.band p{font-size:clamp(.9rem,2.2vw,1.15rem);color:#fff;text-align:center;max-width:580px;margin:0 auto;line-height:1.6}
+.secs{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:1rem}
+.sc{background:var(--wh);padding:.65rem .7rem;font-family:var(--sans);font-size:.9rem;font-weight:600;color:var(--ink2);display:flex;align-items:center;gap:.45rem;transition:.12s;position:relative;cursor:default}
+.sc:hover{background:var(--bg);z-index:5}
+.sc .i{font-size:1.05rem;font-style:normal}
+.sc[title]:hover::after{content:attr(title);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-family:var(--sans);font-size:.82rem;font-weight:500;padding:.4rem .75rem;border-radius:3px;white-space:nowrap;z-index:10;pointer-events:none}
+.sc[title]:hover::before{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink);z-index:10}
 
-/* DIVIDER */
-.ascii-div{font-size:.6rem;color:var(--rule-hi);margin:2rem 0;letter-spacing:.3em;user-select:none}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:1rem 0}
+@media(max-width:640px){.cols{grid-template-columns:1fr;gap:1rem}}
 
-/* SECTOR GRID */
-.secs{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1px;background:var(--rule);margin-top:1.2rem;border:1px solid var(--rule)}
-.sc{background:var(--bg2);padding:.6rem .75rem;font-size:.68rem;color:var(--text);display:flex;align-items:center;gap:.5rem;transition:.15s}
-.sc:hover{background:var(--bg3);color:var(--text-hi)}
-.sc .i{color:var(--red);font-style:normal;font-size:.85rem}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:1rem}
+.card{background:var(--wh);padding:1.15rem;cursor:pointer;transition:.12s;text-decoration:none;color:inherit}
+.card:hover{background:var(--bg);text-decoration:none}
+.card-n{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--red);letter-spacing:.08em;margin-bottom:.2rem}
+.card-n.blue{color:var(--blue)}.card-n.teal{color:var(--teal)}.card-n.green{color:var(--green)}.card-n.amber{color:var(--amber)}
+.card h3{font-family:var(--sans);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:.25rem}
+.card p{font-family:var(--serif);font-size:.92rem;color:var(--ink3);line-height:1.5;margin:0}
+@media(max-width:640px){.cards{grid-template-columns:1fr}}
 
-/* TWO COL */
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.2rem 0}
-.col{background:var(--bg2);padding:1.25rem}
-@media(max-width:620px){.cols{grid-template-columns:1fr}}
+.sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1rem 0}
+.st{background:var(--wh);padding:.85rem .7rem;text-align:center}
+.st-n{font-family:var(--mono);font-size:1.7rem;font-weight:700;color:var(--red);line-height:1.1;margin-bottom:.2rem}
+.st-l{font-family:var(--mono);font-size:.72rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;line-height:1.3}
 
-/* ROADMAP / NAV CARDS */
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:1.2rem}
-.card{background:var(--bg2);padding:1.25rem;cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
-.card:hover{background:var(--bg3);text-decoration:none}
-.card-n{font-size:.6rem;color:var(--red);letter-spacing:.15em;margin-bottom:.3rem}
-.card h3{font-size:.82rem;color:var(--text-hi);font-weight:400;margin-bottom:.35rem}
-.card p{font-size:.7rem;color:var(--text-lo);line-height:1.55;margin:0}
-@media(max-width:620px){.cards{grid-template-columns:1fr}}
-
-/* STATS */
-.sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.2rem 0}
-.st{background:var(--bg2);padding:.85rem .7rem;text-align:center}
-.st-n{font-size:1.55rem;color:var(--red);line-height:1.1;margin-bottom:.2rem}
-.st-l{font-size:.55rem;color:var(--text-lo);text-transform:uppercase;letter-spacing:.08em;line-height:1.3}
-
-/* TABS (for case studies) */
-.tabs{display:flex;gap:1px;background:var(--rule);border:1px solid var(--rule);border-bottom:none;margin-top:1.2rem}
-.tab{flex:1;background:var(--bg2);padding:.7rem;font-family:var(--mono);font-size:.68rem;color:var(--text-lo);cursor:pointer;border:none;text-align:center;transition:.15s;letter-spacing:.05em}
-.tab:hover{color:var(--text);background:var(--bg3)}
-.tab.on{color:var(--red);background:var(--bg);border-bottom:2px solid var(--red)}
-.tab-content{display:none;border:1px solid var(--rule);border-top:none;background:var(--bg2);padding:1.5rem}
+.tabs{display:flex;gap:1px;background:var(--rule);border:1px solid var(--rule);border-bottom:none;margin-top:1rem}
+.tab{flex:1;background:var(--wh);padding:.6rem;font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--ink3);cursor:pointer;border:none;text-align:center;transition:.12s}
+.tab:hover{color:var(--ink);background:var(--bg)}
+.tab.on{color:var(--green);background:var(--bg);border-bottom:2px solid var(--green)}
+.tab-content{display:none;border:1px solid var(--rule);border-top:none;background:var(--wh);padding:1.6rem}
 .tab-content.on{display:block}
-@media(max-width:620px){.tabs{flex-direction:column}.tab.on{border-bottom:none;border-left:2px solid var(--red)}}
+.tab-content h3{font-family:var(--sans);font-size:1.05rem;font-weight:700;color:var(--ink);margin:1.3rem 0 .35rem}
+.tab-content h3:first-of-type{margin-top:.4rem}
+.tab-content p{font-size:1.05rem;line-height:1.78;color:var(--ink2);margin-bottom:.8rem}
+.tab-content p:last-child{margin-bottom:0}
+.tab-content p strong{color:var(--ink)}
+@media(max-width:640px){.tabs{flex-direction:column}.tab.on{border-bottom:none;border-left:3px solid var(--green)}}
 
-/* TIMELINE */
-.tl{position:relative;padding-left:1.8rem;margin-top:1.2rem}
-.tl::before{content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--rule-hi)}
-.tl-i{position:relative;margin-bottom:1.4rem}.tl-i:last-child{margin-bottom:0}
-.tl-i::before{content:'>';position:absolute;left:-1.8rem;top:.15rem;color:var(--red);font-size:.75rem}
-.tl-d{font-size:.65rem;color:var(--red);letter-spacing:.1em;margin-bottom:.15rem}
-.tl-i h3{font-size:.78rem;color:var(--text-hi);font-weight:400;margin:0 0 .25rem;text-transform:none;letter-spacing:0}
-.tl-i p{font-size:.78rem;margin:0}
+.tl{position:relative;padding-left:2rem;margin-top:1rem}
+.tl::before{content:'';position:absolute;left:4px;top:0;bottom:0;width:2px;background:var(--rule)}
+.tl-i{position:relative;margin-bottom:1.3rem}.tl-i:last-child{margin-bottom:0}
+.tl-i::before{content:'';position:absolute;left:-2rem;top:.5rem;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid var(--bg)}
+.tl-i.green::before{background:var(--green)}.tl-i.blue::before{background:var(--blue)}.tl-i.teal::before{background:var(--teal)}.tl-i.amber::before{background:var(--amber)}
+.tl-d{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--red);margin-bottom:.12rem}
+.tl-i h3{font-family:var(--sans);font-size:1.02rem;font-weight:700;color:var(--ink);margin:0 0 .25rem}
+.tl-i p{font-size:1rem;margin:0;line-height:1.72}
 
-/* TABLE */
-.tw{overflow-x:auto;margin-top:1.2rem;border:1px solid var(--rule)}
-.tb{width:100%;border-collapse:collapse;font-size:.7rem}
-.tb th{background:var(--bg3);color:var(--red);font-weight:400;text-align:left;padding:.6rem .75rem;letter-spacing:.06em;text-transform:uppercase;font-size:.6rem;border-bottom:1px solid var(--rule)}
-.tb td{padding:.55rem .75rem;border-bottom:1px solid var(--rule);color:var(--text);line-height:1.5;vertical-align:top}
+.tw{overflow-x:auto;margin-top:1rem;border:1px solid var(--rule)}
+.tb{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:.95rem}
+.tb th{background:var(--ink);color:var(--bg);font-weight:700;text-align:left;padding:.55rem .75rem;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase}
+.tb td{padding:.55rem .75rem;border-bottom:1px solid var(--rule);color:var(--ink2);line-height:1.5;vertical-align:top}
 .tb tr:last-child td{border-bottom:none}
-.tb tr:hover td{background:var(--bg3)}
-.tb td strong{color:var(--text-hi)}
+.tb tr:hover td{background:#f9f7f3}
+.tb td strong{color:var(--ink)}
 
-/* PULL QUOTE */
-.pq{border-left:2px solid var(--red);padding:.5rem 0 .5rem 1rem;margin:1.5rem 0;background:var(--red-dim)}
-.pq p{font-style:italic;font-size:.82rem;color:var(--text-hi)!important;line-height:1.6}
+.pq{border-left:3px solid var(--green);padding:.65rem 0 .65rem 1.1rem;margin:1.4rem 0;background:#2d7d460a}
+.pq p{font-style:italic;font-size:1.08rem;color:var(--ink)!important;line-height:1.6}
 
-/* FIGURE */
-.fig{margin:1.5rem 0;border:1px solid var(--rule);background:var(--bg2)}
-.fig img{width:100%;display:block}
-.fig-c{padding:.5rem .75rem;font-size:.58rem;color:var(--text-lo);line-height:1.45;border-top:1px solid var(--rule)}
-
-/* SVG DIAGRAM CONTAINER */
-.diagram{margin:1.5rem 0;border:1px solid var(--rule);background:var(--bg2);padding:1rem;overflow-x:auto}
+.diagram{margin:1.8rem -1rem;padding:1.3rem;background:var(--wh);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);overflow-x:auto}
 .diagram svg{display:block;margin:0 auto}
-.diagram-c{font-size:.58rem;color:var(--text-lo);margin-top:.5rem;text-align:center}
+.diagram-c{font-family:var(--mono);font-size:.82rem;color:var(--ink3);margin-top:.7rem;text-align:center;line-height:1.45}
 
-/* SOURCES */
-.src{margin-top:2rem;padding-top:1.2rem;border-top:1px solid var(--rule)}
-.src h3{font-size:.6rem;color:var(--red);letter-spacing:.15em;text-transform:uppercase;margin:0 0 .6rem;font-weight:400}
-.src ol{padding-left:1.1rem}
-.src li{font-size:.65rem;color:var(--text-lo);line-height:1.55;margin-bottom:.2rem}
+.anav{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1rem 0}
+.anav a{flex:1;min-width:120px;background:var(--wh);padding:.5rem .6rem;font-family:var(--mono);font-size:.85rem;font-weight:600;color:var(--ink3);text-decoration:none;text-align:center;transition:.12s}
+.anav a:hover{background:var(--bg);color:var(--green);text-decoration:none}
 
-/* ANCHOR NAV (in-page navigation) */
-.anav{display:flex;flex-wrap:wrap;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.2rem 0}
-.anav a{flex:1;min-width:140px;background:var(--bg2);padding:.55rem .7rem;font-size:.62rem;color:var(--text-lo);text-decoration:none;text-align:center;transition:.15s;letter-spacing:.05em}
-.anav a:hover{background:var(--bg3);color:var(--text);text-decoration:none}
-
-/* FOOTER */
-.foot{padding:2rem 1.5rem;border-top:1px solid var(--rule)}
+.foot{padding:1.8rem 1.5rem;border-top:2px solid var(--ink)}
 .foot-i{max-width:var(--col);margin:0 auto}
-.foot p{font-size:.62rem;color:var(--text-lo);line-height:1.6}
-.foot .line{color:var(--rule-hi);font-size:.55rem;margin-bottom:.5rem;letter-spacing:.3em;user-select:none}
+.foot p{font-family:var(--mono);font-size:.85rem;color:var(--ink3);line-height:1.6}
 
-/* FADE */
-.ft{opacity:0;transform:translateY(8px);transition:opacity .4s ease,transform .4s ease}.ft.vis{opacity:1;transform:translateY(0)}
-
-.tag.blue{color:var(--blue)}.tag.teal{color:var(--teal)}.tag.amber{color:var(--amber)}
-.card-n.blue{color:var(--blue)}.card-n.teal{color:var(--teal)}.card-n.amber{color:var(--amber)}
-.st-n.blue{color:var(--blue)}.st-n.teal{color:var(--teal)}.st-n.amber{color:var(--amber)}
-.pq.blue{border-left-color:var(--blue);background:var(--blue-dim)}
-.pq.teal{border-left-color:var(--teal);background:var(--teal-dim)}
-.anav a:hover{background:var(--blue-dim);color:var(--blue);text-decoration:none}
-.band.blue-band{background:var(--blue)}.band.teal-band{background:var(--teal)}
+.ft{opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .4s ease}.ft.vis{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 <nav class="nav"><div class="nav-i">
-  <a class="nav-logo" data-p="home"><span>></span> ransomware_&_ci</a>
+  <a class="nav-logo" data-p="home"><span>//</span> ransomware &amp; ci</a>
   <button class="hb">[menu]</button>
   <ul class="nl">
     <li><a data-p="home" class="on">home</a></li>
-    <li><a data-p="cases">case_studies</a></li>
-    <li><a data-p="fw">us_framework</a></li>
-    <li><a data-p="uk">uk_comparison</a></li>
+    <li><a data-p="cases">case studies</a></li>
+    <li><a data-p="fw">us framework</a></li>
+    <li><a data-p="uk">uk comparison</a></li>
     <li><a data-p="recs">recommendations</a></li>
+    <li><a data-p="refs">references</a></li>
   </ul>
 </div></nav>
 
-<!-- ==================== HOME ==================== -->
+<!-- HOME -->
 <div class="pg live" id="p-home">
   <header class="hero"><div class="hero-i">
-    <p class="hero-tag">PP255 // Intro to Cyber Policy // Duke University</p>
-    <h1>Ransomware Attacks on<br><em>Critical Infrastructure</em></h1>
+    <p class="hero-tag">COMPSCI 255 // Cyber Policy</p>
+    <h1>Ransomware Attacks on Critical Infrastructure</h1>
     <p class="hero-sub">Policy Failures and a Path Forward</p>
-    <p class="hero-meta">Pietro Ferraresi / Spring 2026 / Professor David Hoffman</p>
+    <p class="hero-by">Pietro Ferraresi // 2026</p>
   </div></header>
 
   <section class="s"><div class="si">
     <div class="tag">Introduction</div>
     <h2>The Problem</h2>
-    <p>Ransomware has evolved from low-level nuisance software, the kind that locked individual machines and demanded a few hundred dollars in gift cards, into one of the most pressing national security threats the United States faces today. Modern ransomware operations are run like businesses. They have customer service portals, affiliate programs, and negotiation teams. They target hospitals during surges in patient volume, pipeline operators during peak demand seasons, and payment processors that sit at the center of trillion-dollar transaction flows.</p>
-    <p>These attacks are not random. They are calculated assaults on the entities least able to tolerate downtime and most likely to pay. The operators behind them are sheltered in jurisdictions, primarily Russia and several former Soviet states, where they face little risk of prosecution as long as they avoid targeting domestic systems. The result is a threat environment in which critical services that Americans depend on every day are held hostage by criminal enterprises operating with near-impunity from abroad.</p>
-    <p>The United States designates sixteen critical infrastructure sectors whose assets, systems, and networks are considered so vital that their incapacitation would have a debilitating effect on national security, economic stability, public health, or safety. These sectors span everything from energy and water to healthcare, transportation, and financial services. Yet despite more than two decades of policy development since the first national cybersecurity strategy in 2003, the legal and regulatory framework meant to protect these sectors remains fragmented across dozens of agencies, largely voluntary in its application, and poorly enforced even where binding rules exist.</p>
+    <p>In the early 2010s, ransomware was mostly a nuisance. It locked your files, asked for a few hundred dollars in Bitcoin, and moved on. That version of ransomware is gone. What replaced it is something closer to organized crime on an industrial scale. Today's ransomware groups run affiliate programs, maintain customer service portals for their victims, and employ professional negotiators. They deliberately go after targets that cannot afford to be offline: hospitals in the middle of treating patients, pipelines that move fuel to half the country, and payment processors that handle a third of all U.S. healthcare transactions.</p>
+    <p>None of this is random. These groups pick their targets deliberately, going after organizations where the cost of staying offline is so high that paying a multimillion-dollar ransom looks like the rational choice. And they operate from countries, mainly Russia, where they face essentially zero risk of prosecution as long as they avoid hitting domestic targets.</p>
+    <p>The U.S. government recognizes sixteen critical infrastructure sectors, everything from energy and water to healthcare and financial services, that are considered essential to national security and public safety. The problem is that despite twenty-plus years of policy development on cybersecurity, the framework supposed to protect these sectors is a mess. Responsibility is scattered across dozens of agencies. Most requirements are voluntary. And even where binding rules do exist, enforcement is weak.</p>
 
-    <!-- RaaS ECOSYSTEM DIAGRAM -->
     <div class="diagram">
-      <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" style="max-width:680px;width:100%">
-        <rect width="680" height="320" fill="none"/>
-        <!-- Developer -->
-        <rect x="250" y="10" width="180" height="50" rx="2" fill="none" stroke="#9e2a0f" stroke-width="1.5"/>
-        <text x="340" y="32" fill="#9e2a0f" font-family="Courier New" font-size="10" text-anchor="middle" font-weight="bold">RAAS DEVELOPERS</text>
-        <text x="340" y="46" fill="#8a857d" font-family="Courier New" font-size="8" text-anchor="middle">Build malware, run platform</text>
-        <!-- Lines down -->
-        <line x1="290" y1="60" x2="120" y2="100" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="340" y1="60" x2="340" y2="100" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="390" y1="60" x2="560" y2="100" stroke="#d5d0c8" stroke-width="1"/>
-        <!-- Affiliates -->
-        <rect x="40" y="100" width="160" height="50" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-        <text x="120" y="122" fill="#3a3632" font-family="Courier New" font-size="9" text-anchor="middle">AFFILIATE 1</text>
-        <text x="120" y="136" fill="#8a857d" font-family="Courier New" font-size="7.5" text-anchor="middle">Deploys ransomware (75-90%)</text>
-        <rect x="260" y="100" width="160" height="50" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-        <text x="340" y="122" fill="#3a3632" font-family="Courier New" font-size="9" text-anchor="middle">AFFILIATE 2</text>
-        <text x="340" y="136" fill="#8a857d" font-family="Courier New" font-size="7.5" text-anchor="middle">Deploys ransomware (75-90%)</text>
-        <rect x="480" y="100" width="160" height="50" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-        <text x="560" y="122" fill="#3a3632" font-family="Courier New" font-size="9" text-anchor="middle">AFFILIATE 3</text>
-        <text x="560" y="136" fill="#8a857d" font-family="Courier New" font-size="7.5" text-anchor="middle">Deploys ransomware (75-90%)</text>
-        <!-- IABs -->
-        <rect x="40" y="180" width="160" height="40" rx="2" fill="none" stroke="#1a7a6d" stroke-width="1" stroke-dasharray="4,3"/>
-        <text x="120" y="198" fill="#1a7a6d" font-family="Courier New" font-size="8" text-anchor="middle">INITIAL ACCESS BROKERS</text>
-        <text x="120" y="210" fill="#8a857d" font-family="Courier New" font-size="7" text-anchor="middle">Sell stolen credentials</text>
-        <line x1="120" y1="180" x2="120" y2="150" stroke="#1a7a6d" stroke-width="1" stroke-dasharray="3,3"/>
-        <!-- Crypto -->
-        <rect x="480" y="180" width="160" height="40" rx="2" fill="none" stroke="#2456a4" stroke-width="1" stroke-dasharray="4,3"/>
-        <text x="560" y="198" fill="#2456a4" font-family="Courier New" font-size="8" text-anchor="middle">CRYPTO MIXERS/EXCHANGES</text>
-        <text x="560" y="210" fill="#8a857d" font-family="Courier New" font-size="7" text-anchor="middle">Launder ransom payments</text>
-        <line x1="560" y1="180" x2="560" y2="150" stroke="#2456a4" stroke-width="1" stroke-dasharray="3,3"/>
-        <!-- Victims -->
-        <rect x="170" y="250" width="340" height="50" rx="2" fill="#9e2a0f15" stroke="#9e2a0f" stroke-width="1"/>
-        <text x="340" y="272" fill="#9e2a0f" font-family="Courier New" font-size="10" text-anchor="middle">VICTIMS (Critical Infrastructure)</text>
-        <text x="340" y="286" fill="#8a857d" font-family="Courier New" font-size="7.5" text-anchor="middle">Hospitals / Pipelines / Payment processors / Utilities</text>
-        <line x1="120" y1="150" x2="260" y2="250" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="340" y1="150" x2="340" y2="250" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="560" y1="150" x2="420" y2="250" stroke="#d5d0c8" stroke-width="1"/>
+      <svg viewBox="0 0 760 370" xmlns="http://www.w3.org/2000/svg" style="max-width:760px;width:100%">
+        <rect x="270" y="10" width="220" height="60" rx="3" fill="#9e2a0f0a" stroke="#9e2a0f" stroke-width="2"/>
+        <text x="380" y="36" fill="#9e2a0f" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">RAAS DEVELOPERS</text>
+        <text x="380" y="54" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="11" text-anchor="middle">Build the malware, run the platform, take 10-25%</text>
+        <line x1="320" y1="70" x2="130" y2="120" stroke="#d5d0c8" stroke-width="1.5"/>
+        <line x1="380" y1="70" x2="380" y2="120" stroke="#d5d0c8" stroke-width="1.5"/>
+        <line x1="440" y1="70" x2="630" y2="120" stroke="#d5d0c8" stroke-width="1.5"/>
+        <rect x="30" y="120" width="200" height="55" rx="3" fill="none" stroke="#3d3833" stroke-width="1.5"/>
+        <text x="130" y="145" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">AFFILIATE 1</text>
+        <text x="130" y="162" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Carries out attacks, keeps 75-90%</text>
+        <rect x="280" y="120" width="200" height="55" rx="3" fill="none" stroke="#3d3833" stroke-width="1.5"/>
+        <text x="380" y="145" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">AFFILIATE 2</text>
+        <text x="380" y="162" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Carries out attacks, keeps 75-90%</text>
+        <rect x="530" y="120" width="200" height="55" rx="3" fill="none" stroke="#3d3833" stroke-width="1.5"/>
+        <text x="630" y="145" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">AFFILIATE 3</text>
+        <text x="630" y="162" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Carries out attacks, keeps 75-90%</text>
+        <rect x="30" y="215" width="200" height="48" rx="3" fill="none" stroke="#1a7a6d" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <text x="130" y="237" fill="#1a7a6d" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">ACCESS BROKERS</text>
+        <text x="130" y="253" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Sell stolen credentials</text>
+        <line x1="130" y1="215" x2="130" y2="175" stroke="#1a7a6d" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="530" y="215" width="200" height="48" rx="3" fill="none" stroke="#2456a4" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <text x="630" y="237" fill="#2456a4" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">CRYPTO LAUNDERING</text>
+        <text x="630" y="253" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Mixers, OTC brokers, exchanges</text>
+        <line x1="630" y1="215" x2="630" y2="175" stroke="#2456a4" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="160" y="300" width="440" height="55" rx="3" fill="#2d7d460a" stroke="#2d7d46" stroke-width="2"/>
+        <text x="380" y="324" fill="#2d7d46" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">VICTIMS</text>
+        <text x="380" y="342" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="11" text-anchor="middle">Hospitals, pipelines, payment processors, utilities</text>
+        <line x1="130" y1="175" x2="270" y2="300" stroke="#d5d0c8" stroke-width="1"/>
+        <line x1="380" y1="175" x2="380" y2="300" stroke="#d5d0c8" stroke-width="1"/>
+        <line x1="630" y1="175" x2="490" y2="300" stroke="#d5d0c8" stroke-width="1"/>
       </svg>
-      <div class="diagram-c">Fig 1. The Ransomware-as-a-Service (RaaS) Ecosystem. Developers build and maintain the platform; affiliates carry out attacks; initial access brokers supply stolen credentials; crypto infrastructure launders payments.</div>
+      <div class="diagram-c">How ransomware-as-a-service works.</div>
     </div>
 
-    <p>This project examines that gap. Through three anchoring case studies, <strong>WannaCry (2017)</strong>, <strong>Colonial Pipeline (2021)</strong>, and <strong>Change Healthcare (2024)</strong>, it traces the recurring policy failures that have left critical infrastructure exposed to an escalating threat. It then evaluates the current U.S. cybersecurity legal and policy framework, draws comparative insights from the United Kingdom's regulatory approach, and concludes with specific, actionable recommendations for reform.</p>
+    <p>This site looks at how we got here. Three case studies (<strong>WannaCry</strong>, <strong>Colonial Pipeline</strong>, and <strong>Change Healthcare</strong>) show the same failures playing out again and again across seven years. From there, it breaks down the current U.S. policy framework and its gaps, compares it to what the UK has built, and ends with six concrete recommendations for what should change.</p>
   </div></section>
 
-  <div class="band"><p>Why has the United States struggled to deter and respond to ransomware attacks on critical infrastructure, and what reforms are needed?</p></div>
+  <div class="band"><p>Why does the U.S. keep getting hit by ransomware attacks on critical infrastructure, and what actually needs to change?</p></div>
 
   <section class="s"><div class="si">
     <div class="tag teal">Background</div>
     <h2>The 16 Critical Infrastructure Sectors</h2>
-    <p>Presidential Policy Directive 21 (PPD-21), issued in 2013, identifies sixteen critical infrastructure sectors and assigns each a Sector Risk Management Agency (SRMA). The depth, enforceability, and resourcing of cybersecurity requirements varies enormously from one sector to the next. Some sectors operate under detailed binding regulations. Others have almost no enforceable federal cybersecurity requirements, leaving thousands of small utilities to fend for themselves.</p>
+    <p>Presidential Policy Directive 21 (2013) identifies sixteen sectors and assigns each a lead federal agency called a Sector Risk Management Agency (SRMA). In practice, the security requirements across these sectors range from genuinely rigorous (financial services, nuclear) to essentially nonexistent (water systems, many healthcare providers).</p>
     <div class="secs">
-      <div class="sc"><em class="i">⚡</em> Energy</div>
-      <div class="sc"><em class="i">☤</em> Healthcare</div>
-      <div class="sc"><em class="i">💧</em> Water</div>
-      <div class="sc"><em class="i">✈</em> Transportation</div>
-      <div class="sc"><em class="i">💰</em> Financial Services</div>
-      <div class="sc"><em class="i">📡</em> Communications</div>
-      <div class="sc"><em class="i">🏭</em> Chemical</div>
-      <div class="sc"><em class="i">☢</em> Nuclear</div>
-      <div class="sc"><em class="i">🏛</em> Gov. Facilities</div>
-      <div class="sc"><em class="i">🔧</em> Defense Industrial</div>
-      <div class="sc"><em class="i">🌾</em> Food &amp; Agriculture</div>
-      <div class="sc"><em class="i">💻</em> Info. Technology</div>
-      <div class="sc"><em class="i">🚒</em> Emergency Services</div>
-      <div class="sc"><em class="i">🏢</em> Commercial</div>
-      <div class="sc"><em class="i">⚙</em> Manufacturing</div>
-      <div class="sc"><em class="i">🌊</em> Dams</div>
+      <div class="sc" title="Lead: Dept. of Energy"><em class="i">⚡</em> Energy</div>
+      <div class="sc" title="Lead: HHS"><em class="i">☤</em> Healthcare</div>
+      <div class="sc" title="Lead: EPA"><em class="i">💧</em> Water</div>
+      <div class="sc" title="Lead: DHS (TSA) + DOT"><em class="i">✈</em> Transportation</div>
+      <div class="sc" title="Lead: Treasury"><em class="i">💰</em> Financial Services</div>
+      <div class="sc" title="Lead: CISA"><em class="i">📡</em> Communications</div>
+      <div class="sc" title="Lead: CISA"><em class="i">🏭</em> Chemical</div>
+      <div class="sc" title="Lead: NRC"><em class="i">☢</em> Nuclear</div>
+      <div class="sc" title="Lead: CISA + GSA"><em class="i">🏛</em> Gov. Facilities</div>
+      <div class="sc" title="Lead: DOD"><em class="i">🔧</em> Defense Industrial</div>
+      <div class="sc" title="Lead: USDA + FDA"><em class="i">🌾</em> Food &amp; Agriculture</div>
+      <div class="sc" title="Lead: CISA"><em class="i">💻</em> Info. Technology</div>
+      <div class="sc" title="Lead: CISA"><em class="i">🚒</em> Emergency Services</div>
+      <div class="sc" title="Lead: CISA"><em class="i">🏢</em> Commercial Facilities</div>
+      <div class="sc" title="Lead: CISA"><em class="i">⚙</em> Critical Manufacturing</div>
+      <div class="sc" title="Lead: CISA"><em class="i">🌊</em> Dams</div>
     </div>
+    <p style="margin-top:.5rem;font-size:.92rem;color:var(--ink3);font-style:italic">Hover over a sector to see its lead federal agency.</p>
   </div></section>
 
   <section class="s"><div class="si">
-    <div class="tag blue">Analysis</div>
-    <h2>Why Critical Infrastructure Is Uniquely Vulnerable</h2>
-    <div class="cols"><div class="col">
-      <h3>Operational Constraints</h3>
-      <p>A hospital ED cannot go offline for a week to rebuild its network. A pipeline operator supplying fuel to half the East Coast cannot pause deliveries. Attackers design their operations around this calculus. The urgency to restore operations creates pressure to pay ransoms quickly, funding future attacks in a self-reinforcing cycle.</p>
-    </div><div class="col">
-      <h3>Legacy Systems + IT/OT Convergence</h3>
-      <p>Many CI sectors depend on aging OT never designed for internet connectivity. ICS, SCADA, and medical devices lack encryption, authentication, or patching capability. Over two decades, these systems have been connected to IT networks for monitoring and efficiency, creating pathways from a compromised email account directly into physical control systems.</p>
+    <div class="tag blue">Vulnerability</div>
+    <h2>Why Critical Infrastructure Keeps Getting Hit</h2>
+    <div class="cols"><div>
+      <h3>Can't Afford Downtime</h3>
+      <p>A hospital emergency department cannot just go offline for a week while IT rebuilds the network. A pipeline supplying fuel to half the East Coast cannot pause deliveries while someone figures out whether the control systems were compromised. Ransomware groups know this, and they use it. The more urgent it is to get back online, the more likely the victim is to pay up, which directly funds the next attack.</p>
+    </div><div>
+      <h3>Ancient Systems, New Connections</h3>
+      <p>A huge amount of critical infrastructure still runs on technology that was never built to be connected to the internet. Industrial control systems, SCADA networks, medical devices, all designed for reliability, not security. Over the last twenty years these systems got connected to corporate networks for monitoring and efficiency. That created direct pathways from something as routine as a compromised email account all the way into systems controlling physical processes.</p>
     </div></div>
-    <div class="cols"><div class="col">
-      <h3>Attribution + Deterrence Gaps</h3>
-      <p>Ransomware groups operate from jurisdictions (primarily Russia) where they face minimal prosecution risk. The RaaS model fragments the ecosystem: developers, affiliates, and initial access brokers are separate entities. This makes attribution harder, legal action slower, and traditional deterrence frameworks poorly suited to the threat.</p>
-    </div><div class="col">
-      <h3>Information Asymmetries</h3>
-      <p>Victims have strong incentives to conceal breaches. Before CIRCIA (still not fully implemented as of early 2026), the federal government had limited visibility into the scope and frequency of attacks. Without comprehensive data, it is impossible to design policy interventions that match the scale of the problem.</p>
+    <div class="cols"><div>
+      <h3>Safe Havens</h3>
+      <p>Most major ransomware groups operate out of Russia and neighboring countries where law enforcement will not touch them as long as they avoid domestic targets. The RaaS model makes it worse by splitting operations into separate roles: the people building the malware, the people deploying it, and the brokers selling stolen credentials are all different actors. That fragmentation makes attribution difficult and traditional deterrence nearly impossible.</p>
+    </div><div>
+      <h3>Nobody Knows the Full Picture</h3>
+      <p>Companies that get hit have every reason to keep it quiet. Disclosure means stock drops, lawsuits, regulatory scrutiny, and reputational damage. Until CIRCIA's mandatory reporting kicks in (which, as of early 2026, it still has not), the federal government is essentially flying blind on how often these attacks are actually happening and how bad they really are.</p>
     </div></div>
   </div></section>
 
   <section class="s"><div class="si">
-    <div class="tag amber">Navigate</div>
-    <h2>Site Structure</h2>
+    <div class="tag green">Navigate</div>
+    <h2>What's on This Site</h2>
     <div class="cards">
-      <div class="card" data-go="cases"><div class="card-n">01</div><h3>Case Studies</h3><p>WannaCry, Colonial Pipeline, and Change Healthcare: three incidents spanning seven years that expose the same recurring failures.</p></div>
-      <div class="card" data-go="fw"><div class="card-n blue">02</div><h3>U.S. Policy Framework</h3><p>Key milestones from HSPD-7 through CIRCIA, and five structural weaknesses undermining the current framework.</p></div>
-      <div class="card" data-go="uk"><div class="card-n teal">03</div><h3>UK Comparison</h3><p>The NCSC, NIS Regulations, and Active Cyber Defence program: a contrasting model with lessons for U.S. reform.</p></div>
-      <div class="card" data-go="recs"><div class="card-n amber">04</div><h3>Recommendations</h3><p>Six specific, actionable policy proposals addressing standards, reporting, authority, concentration risk, and deterrence.</p></div>
+      <div class="card" data-go="cases"><div class="card-n">01</div><h3>Case Studies</h3><p>WannaCry, Colonial Pipeline, Change Healthcare. Three incidents, seven years, same failures.</p></div>
+      <div class="card" data-go="fw"><div class="card-n blue">02</div><h3>U.S. Framework</h3><p>Twenty years of policy milestones and the five gaps that undermine them.</p></div>
+      <div class="card" data-go="uk"><div class="card-n green">03</div><h3>UK Comparison</h3><p>What the NCSC and NIS Regulations look like, and what translates.</p></div>
+      <div class="card" data-go="recs"><div class="card-n amber">04</div><h3>Recommendations</h3><p>Six specific proposals for what should change.</p></div>
     </div>
   </div></section>
 </div>
 
-<!-- ==================== CASE STUDIES (with tabs) ==================== -->
+<!-- CASE STUDIES -->
 <div class="pg" id="p-cases">
-  <div class="ph"><div class="ph-i"><div class="tag">Case Studies</div><h1>Three Incidents, One Recurring Failure</h1><p class="desc">Each attack exploited known vulnerabilities, exposed coordination failures, and prompted policy responses that arrived too late for the next victim.</p></div></div>
+  <div class="ph"><div class="ph-i"><div class="tag">Case Studies</div><h1>Three Incidents, One Pattern</h1><p class="desc">Every one of these attacks exploited known vulnerabilities that could have been prevented with basic security measures. Every one prompted policy changes that came too late for the next victim.</p></div></div>
 
   <section class="s"><div class="si w">
     <div class="tabs">
-      <button class="tab on" data-tab="wc">01 // WannaCry</button>
-      <button class="tab" data-tab="cp">02 // Colonial Pipeline</button>
-      <button class="tab" data-tab="ch">03 // Change Healthcare</button>
+      <button class="tab on" data-tab="wc">WannaCry</button>
+      <button class="tab" data-tab="cp">Colonial Pipeline</button>
+      <button class="tab" data-tab="ch">Change Healthcare</button>
     </div>
 
-    <!-- WANNACRY TAB -->
     <div class="tab-content on" id="tc-wc">
       <div class="tag">May 2017</div>
-      <div class="sts" style="margin-top:.6rem">
+      <div class="sts" style="margin-top:.5rem">
         <div class="st"><div class="st-n">150+</div><div class="st-l">countries</div></div>
         <div class="st"><div class="st-n">230k</div><div class="st-l">machines hit</div></div>
         <div class="st"><div class="st-n">$4B+</div><div class="st-l">est. damages</div></div>
         <div class="st"><div class="st-n">~$300</div><div class="st-l">ransom/machine</div></div>
       </div>
-
-      <!-- Attack chain diagram -->
-      <div class="diagram">
-        <svg viewBox="0 0 660 80" xmlns="http://www.w3.org/2000/svg" style="max-width:660px;width:100%">
-          <rect width="660" height="80" fill="none"/>
-          <rect x="0" y="20" width="120" height="40" rx="2" fill="none" stroke="#9e2a0f" stroke-width="1"/>
-          <text x="60" y="38" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">NSA DISCOVERS</text>
-          <text x="60" y="48" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">ETERNALBLUE</text>
-          <text x="148" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="165" y="20" width="120" height="40" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-          <text x="225" y="38" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">SHADOW BROKERS</text>
-          <text x="225" y="48" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">LEAK (APR 2017)</text>
-          <text x="313" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="330" y="20" width="120" height="40" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-          <text x="390" y="38" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">LAZARUS GROUP</text>
-          <text x="390" y="48" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">WEAPONIZES</text>
-          <text x="478" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="495" y="20" width="155" height="40" rx="2" fill="#9e2a0f15" stroke="#9e2a0f" stroke-width="1"/>
-          <text x="572" y="38" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">WANNACRY DEPLOYED</text>
-          <text x="572" y="48" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">150+ COUNTRIES (MAY 12)</text>
-          <text x="60" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Stockpiled as weapon</text>
-          <text x="225" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">MS17-010 patch: Mar 2017</text>
-          <text x="390" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Built cryptoworm</text>
-          <text x="572" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Kill-switch found by Hutchins</text>
-        </svg>
-        <div class="diagram-c">Fig 2. WannaCry attack chain: from NSA vulnerability hoarding to global ransomware pandemic.</div>
-      </div>
-
-      <h3>Technical Overview</h3>
-      <p>WannaCry was a ransomware cryptoworm exploiting EternalBlue, a vulnerability in Microsoft's SMB protocol developed by the NSA's Tailored Access Operations (TAO) unit. Leaked by the Shadow Brokers in April 2017. Microsoft had patched it (MS17-010) two months before the attack, but vast numbers of systems remained unpatched, particularly those running end-of-life Windows XP. The worm propagated autonomously without user interaction, scanning for vulnerable SMB ports and self-replicating at extraordinary speed. Researcher Marcus Hutchins halted spread by registering a hardcoded kill-switch domain.</p>
-
-      <h3>Impact: UK NHS</h3>
-      <p>At least 80 of 236 hospital trusts affected across England and Scotland, along with 595 GP practices. Approximately 19,000 appointments cancelled, including urgent cancer referrals. Ambulances diverted, surgeries cancelled, some facilities turning away patients entirely. The National Audit Office later found the NHS had been warned repeatedly about cybersecurity vulnerabilities in the years before WannaCry but failed to act.</p>
-
-      <h3>Impact: United States</h3>
-      <p>Smaller direct impact, though Heritage Valley Health System in Pennsylvania reported disruptions to radiology, lab, and pharmacy systems. The more consequential American dimension: the NSA had discovered the SMB vulnerability and stockpiled it as an offensive weapon rather than disclosing it to Microsoft. When the Shadow Brokers leaked the exploit, it became globally available, transforming a classified intelligence asset into a destructive weapon accessible to anyone.</p>
-
-      <h3>Policy Lessons</h3>
-      <p><strong>1.</strong> The VEP had prioritized offensive capability over defensive security. No transparency, no independent oversight, no accountability. <strong>2.</strong> Patch management across critical infrastructure (especially healthcare) was dangerously inconsistent. The NHS ran thousands of machines on unsupported operating systems. <strong>3.</strong> No international coordination mechanism existed for rapid ransomware response. Attribution to North Korea came months later; response was limited to statements and sanctions.</p>
+      <h3>What Happened</h3>
+      <p>WannaCry was a ransomware worm that exploited a vulnerability in Windows called EternalBlue. Here is the part that matters for policy: EternalBlue was discovered by the NSA, which decided to keep it secret and use it as a hacking tool rather than telling Microsoft about it so it could be patched. When a group called the Shadow Brokers leaked the exploit in April 2017, it became available to anyone. Microsoft had actually released a patch (MS17-010) in March 2017, two months before the attack, but enormous numbers of systems were still running unpatched, especially legacy Windows XP machines in hospitals and industrial settings that could not easily be upgraded.</p>
+      <p>The worm spread on its own without anyone needing to click anything. Once it hit one machine on a network, it scanned for other vulnerable systems and replicated itself. A security researcher named Marcus Hutchins accidentally found a kill switch by registering a domain that was hardcoded into the malware. That slowed the spread, but machines that were already encrypted stayed locked.</p>
+      <h3>The Damage</h3>
+      <p>The worst impact was on the UK's National Health Service. Over 80 hospital trusts were hit, along with 595 GP practices. About 19,000 appointments got cancelled, including cancer referrals. Ambulances were rerouted and some hospitals turned patients away. The UK's National Audit Office later found that the NHS had been warned about its cybersecurity problems multiple times before WannaCry and had done essentially nothing about it.</p>
+      <p>In the U.S., a few hospitals including Heritage Valley Health System in Pennsylvania had disruptions, but the bigger issue was the origin of the exploit. The NSA had found this vulnerability and sat on it for years instead of getting it fixed. When it leaked, the agency's offensive weapon became everyone's weapon.</p>
+      <h3>What It Showed</h3>
+      <p>Three things. First, the Vulnerabilities Equities Process (the system for deciding whether the government discloses or keeps vulnerabilities) was broken, with no transparency or accountability. Second, patch management in critical infrastructure, especially healthcare, was in terrible shape. Third, there was no real mechanism for countries to coordinate a rapid response to a ransomware attack that was hitting 150+ nations simultaneously.</p>
     </div>
 
-    <!-- COLONIAL PIPELINE TAB -->
     <div class="tab-content" id="tc-cp">
       <div class="tag blue">May 2021</div>
-      <div class="sts" style="margin-top:.6rem">
+      <div class="sts" style="margin-top:.5rem">
         <div class="st"><div class="st-n">5,500</div><div class="st-l">miles shut down</div></div>
         <div class="st"><div class="st-n">$4.4M</div><div class="st-l">ransom paid</div></div>
         <div class="st"><div class="st-n">45%</div><div class="st-l">east coast fuel</div></div>
         <div class="st"><div class="st-n">6 days</div><div class="st-l">shutdown</div></div>
       </div>
-
-      <div class="diagram">
-        <svg viewBox="0 0 660 80" xmlns="http://www.w3.org/2000/svg" style="max-width:660px;width:100%">
-          <rect width="660" height="80" fill="none"/>
-          <rect x="0" y="20" width="130" height="40" rx="2" fill="none" stroke="#1a7a6d" stroke-width="1"/>
-          <text x="65" y="38" fill="#1a7a6d" font-family="Courier New" font-size="7" text-anchor="middle">STOLEN VPN CRED</text>
-          <text x="65" y="48" fill="#1a7a6d" font-family="Courier New" font-size="7" text-anchor="middle">(NO MFA)</text>
-          <text x="155" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="170" y="20" width="120" height="40" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-          <text x="230" y="38" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">DARKSIDE ENTERS</text>
-          <text x="230" y="48" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">IT NETWORK</text>
-          <text x="315" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="330" y="20" width="130" height="40" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-          <text x="395" y="38" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">BILLING SYSTEMS</text>
-          <text x="395" y="48" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">ENCRYPTED</text>
-          <text x="485" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="500" y="20" width="150" height="40" rx="2" fill="#9e2a0f15" stroke="#9e2a0f" stroke-width="1"/>
-          <text x="575" y="38" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">FULL PIPELINE SHUTDOWN</text>
-          <text x="575" y="48" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">(PRECAUTIONARY)</text>
-          <text x="65" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Dark web marketplace</text>
-          <text x="230" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Lateral movement</text>
-          <text x="395" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">OT not directly hit</text>
-          <text x="575" y="72" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Can't verify OT safe</text>
-        </svg>
-        <div class="diagram-c">Fig 3. Colonial Pipeline attack chain: a single VPN credential without MFA led to shutdown of 45% of East Coast fuel supply.</div>
-      </div>
-
-      <h3>Technical Overview</h3>
-      <p>DarkSide, a RaaS operation based in Eastern Europe, used a compromised VPN credential without MFA. The attackers hit IT systems (billing, accounting), not OT directly. But Colonial could not verify OT was unaffected and could not operate the pipeline without billing infrastructure, so they shut down the entire 5,500-mile system as a precaution. The pipeline carries ~2.5 million barrels/day of gasoline, diesel, jet fuel, and heating oil.</p>
-
-      <h3>Impact</h3>
-      <p>Fuel shortages across the southeastern U.S. Gas stations ran dry. Panic buying, price spikes. Virginia, North Carolina, Georgia, and Florida declared states of emergency. Jet fuel shortages at Charlotte Douglas and Hartsfield-Jackson Atlanta airports. Colonial paid $4.4M in Bitcoin; FBI recovered ~$2.3M by seizing DarkSide's crypto wallet. DarkSide announced shutdown shortly after, but successor groups (BlackMatter, ALPHV/BlackCat) emerged from its members.</p>
-
-      <h3>Policy Lessons</h3>
-      <p>Forced ransomware onto the national security agenda. EO 14028 and first-ever mandatory TSA pipeline cybersecurity directives followed within weeks. But before the attack, pipeline cybersecurity was voluntary. TSA had no enforcement mechanism. Colonial had not been reviewed in three years. The case also highlighted IT/OT interdependence: even without direct OT compromise, the inability to separate business and operational systems shut down physical infrastructure.</p>
+      <h3>What Happened</h3>
+      <p>A group called DarkSide, running a ransomware-as-a-service operation out of Eastern Europe, got into Colonial Pipeline's network using a single compromised VPN password. The account did not have multi-factor authentication turned on. Once inside, they moved through Colonial's IT systems and encrypted billing and business infrastructure.</p>
+      <p>Here is the critical detail: DarkSide never actually touched the pipeline's control systems. They hit IT, not OT. But Colonial could not verify whether the operational technology was also compromised, and they could not run the pipeline without the billing systems that track fuel deliveries. So they shut the entire thing down as a precaution. A compromised password for a VPN with no MFA ended up taking offline the pipeline that carries 45% of the East Coast's fuel.</p>
+      <h3>The Damage</h3>
+      <p>Fuel shortages across the southeast. Gas stations running dry. Panic buying. Price spikes. Multiple states declaring emergencies. Jet fuel shortages at Charlotte and Atlanta airports. Colonial paid $4.4 million in Bitcoin. The FBI later managed to recover about $2.3 million of that by seizing DarkSide's crypto wallet, which was a rare win. DarkSide announced it was shutting down shortly after, but its members later showed up in successor groups like BlackMatter and ALPHV/BlackCat.</p>
+      <h3>What It Showed</h3>
+      <p>This was the incident that put ransomware on the White House's radar as a national security issue. Executive Order 14028 and TSA's first-ever mandatory pipeline cybersecurity directives came within weeks. But the deeper lesson was that pipeline cybersecurity had been completely voluntary before this. TSA had no enforcement power. Colonial had not been reviewed in three years. And the IT/OT convergence problem (where taking down business systems also takes down physical operations) turned out to be endemic across virtually every CI sector.</p>
     </div>
 
-    <!-- CHANGE HEALTHCARE TAB -->
     <div class="tab-content" id="tc-ch">
       <div class="tag teal">February 2024</div>
-      <div class="sts" style="margin-top:.6rem">
+      <div class="sts" style="margin-top:.5rem">
         <div class="st"><div class="st-n">190M+</div><div class="st-l">people affected</div></div>
         <div class="st"><div class="st-n">$22M</div><div class="st-l">ransom paid</div></div>
         <div class="st"><div class="st-n">$3.1B</div><div class="st-l">cost to UHG</div></div>
         <div class="st"><div class="st-n">Weeks</div><div class="st-l">of disruption</div></div>
       </div>
-
-      <div class="diagram">
-        <svg viewBox="0 0 660 80" xmlns="http://www.w3.org/2000/svg" style="max-width:660px;width:100%">
-          <rect width="660" height="80" fill="none"/>
-          <rect x="0" y="20" width="120" height="40" rx="2" fill="none" stroke="#1a7a6d" stroke-width="1"/>
-          <text x="60" y="38" fill="#1a7a6d" font-family="Courier New" font-size="7" text-anchor="middle">CITRIX PORTAL</text>
-          <text x="60" y="48" fill="#1a7a6d" font-family="Courier New" font-size="7" text-anchor="middle">(NO MFA)</text>
-          <text x="145" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="160" y="20" width="120" height="40" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-          <text x="220" y="38" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">9 DAYS INSIDE</text>
-          <text x="220" y="48" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">NETWORK (EXFIL)</text>
-          <text x="305" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="320" y="20" width="120" height="40" rx="2" fill="none" stroke="#9e2a0f" stroke-width="1"/>
-          <text x="380" y="38" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">RANSOMWARE</text>
-          <text x="380" y="48" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">DEPLOYED (FEB 21)</text>
-          <text x="465" y="43" fill="#8a857d" font-family="Courier New" font-size="10">→</text>
-          <rect x="480" y="20" width="170" height="40" rx="2" fill="#9e2a0f15" stroke="#9e2a0f" stroke-width="1"/>
-          <text x="565" y="34" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">$22M RANSOM PAID</text>
-          <text x="565" y="44" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">ALPHV TAKES MONEY +</text>
-          <text x="565" y="54" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">DISAPPEARS ON AFFILIATE</text>
-        </svg>
-        <div class="diagram-c">Fig 4. Change Healthcare attack chain. Same fundamental failure as Colonial Pipeline (no MFA on remote access), but with $3.1 billion in downstream costs.</div>
-      </div>
-
-      <h3>Technical Overview</h3>
-      <p>ALPHV/BlackCat affiliate gained access via a Citrix remote access portal without MFA (per UHG CEO Andrew Witty's Senate Finance Committee testimony). Spent 9 days inside the network exfiltrating data before deploying ransomware on February 21, 2024. UHG paid ~$22M in Bitcoin on March 3. The ALPHV/BlackCat leadership then took the payment and disappeared without paying the affiliate their share, who threatened additional data leaks through RansomHub.</p>
-
-      <h3>Impact</h3>
-      <p>Change Healthcare processes ~1 in 3 U.S. patient records. Pharmacies nationwide could not process insurance claims. Hospitals experienced weeks-long reimbursement delays. Cash flow crises especially for small/independent providers. 192.7 million individuals' data exposed (names, SSNs, diagnoses, treatment records, billing). Total cost to UHG: $3.09 billion through FY2024, excluding potential civil litigation from providers forced to downsize or close.</p>
-
-      <h3>Policy Lessons</h3>
-      <p><strong>Concentration risk:</strong> one company's failure cascaded across the entire U.S. healthcare payment system. Existing frameworks focus on individual entities, not systemic interdependencies. <strong>Regulatory gap:</strong> HIPAA's Security Rule (last updated 2013) does not mandate MFA or specific technical controls. <strong>RaaS fragility:</strong> the affiliate scam shows the ecosystem's internal instability can be exploited by law enforcement through targeted disruption and trust erosion.</p>
+      <h3>What Happened</h3>
+      <p>Change Healthcare is a subsidiary of UnitedHealth Group that processes roughly one out of every three U.S. healthcare transactions: insurance claims, payments, prior authorizations, the works. An affiliate of the ALPHV/BlackCat ransomware group got in through a Citrix remote access portal that did not have multi-factor authentication. That is the same basic failure as Colonial Pipeline, three years later.</p>
+      <p>The attackers spent nine days inside the network stealing data before deploying ransomware on February 21, 2024. UnitedHealth paid about $22 million in Bitcoin on March 3. Then things got even messier: the ALPHV/BlackCat leadership apparently took the money and disappeared without paying the affiliate their cut. The affiliate then threatened to leak the stolen data through a different group called RansomHub, essentially trying to extort UnitedHealth a second time.</p>
+      <h3>The Damage</h3>
+      <p>Pharmacies across the country could not process insurance claims. Hospitals went weeks without getting reimbursed for services they had already provided. Small and independent practices, community health centers, and rural hospitals got hit the hardest because they did not have the cash reserves to survive weeks without revenue. About 192.7 million people had their personal health data exposed, making it the largest healthcare breach in U.S. history. UnitedHealth's total cost reached $3.09 billion for fiscal year 2024 alone.</p>
+      <h3>What It Showed</h3>
+      <p>This one was about concentration risk. Change Healthcare is so embedded in the U.S. healthcare payment system that when it went down, the entire system seized up. Current regulations do not account for that kind of systemic dependency. HIPAA's security rule has not been meaningfully updated since 2013 and does not require MFA or any other specific technical control. And the ALPHV affiliate drama showed that the RaaS ecosystem is internally fragile in ways that law enforcement and intelligence agencies could exploit more aggressively.</p>
     </div>
   </div></section>
 
-  <!-- COMPARISON TABLE -->
   <section class="s"><div class="si w">
     <div class="tag amber">Comparison</div>
-    <h2>Across the Three Cases</h2>
+    <h2>Side by Side</h2>
     <div class="tw"><table class="tb">
       <thead><tr><th></th><th>WannaCry (2017)</th><th>Colonial Pipeline (2021)</th><th>Change Healthcare (2024)</th></tr></thead>
       <tbody>
-        <tr><td><strong>Vector</strong></td><td>EternalBlue SMB exploit (NSA leak)</td><td>VPN credential, no MFA</td><td>Citrix portal, no MFA</td></tr>
-        <tr><td><strong>Attacker</strong></td><td>Lazarus Group (DPRK)</td><td>DarkSide (RaaS)</td><td>ALPHV/BlackCat (RaaS)</td></tr>
-        <tr><td><strong>Root Cause</strong></td><td>Unpatched legacy + VEP hoarding</td><td>Weak creds + IT/OT gap</td><td>No MFA + concentration risk</td></tr>
-        <tr><td><strong>Ransom</strong></td><td>~$140k (low payment rate)</td><td>$4.4M ($2.3M recovered)</td><td>$22M (no recovery)</td></tr>
-        <tr><td><strong>Scale</strong></td><td>19k NHS appointments cancelled</td><td>45% East Coast fuel, 6 days</td><td>190M+ records; $3.09B cost</td></tr>
-        <tr><td><strong>Response</strong></td><td>VEP charter published</td><td>EO 14028; TSA directives</td><td>HHS payments; HIPAA talks</td></tr>
-        <tr><td><strong>Lesson</strong></td><td>Intel hoarding costs defense</td><td>Voluntary standards fail</td><td>Concentration unaddressed</td></tr>
+        <tr><td><strong>Entry point</strong></td><td>EternalBlue exploit (leaked from NSA)</td><td>VPN credential, no MFA</td><td>Citrix portal, no MFA</td></tr>
+        <tr><td><strong>Who</strong></td><td>Lazarus Group (North Korea)</td><td>DarkSide (RaaS)</td><td>ALPHV/BlackCat (RaaS)</td></tr>
+        <tr><td><strong>Root cause</strong></td><td>Unpatched systems + VEP failure</td><td>No MFA + IT/OT convergence</td><td>No MFA + concentration risk</td></tr>
+        <tr><td><strong>Ransom</strong></td><td>~$140k total</td><td>$4.4M ($2.3M recovered)</td><td>$22M (no recovery)</td></tr>
+        <tr><td><strong>Scale</strong></td><td>19k NHS appointments cancelled</td><td>45% East Coast fuel, 6 days</td><td>190M+ records, $3.09B cost</td></tr>
+        <tr><td><strong>Policy response</strong></td><td>VEP charter published</td><td>EO 14028, TSA directives</td><td>HHS emergency payments, HIPAA talks</td></tr>
+        <tr><td><strong>Core lesson</strong></td><td>Hoarding vulns has real costs</td><td>Voluntary standards are not enough</td><td>Concentration risk is unaddressed</td></tr>
       </tbody>
     </table></div>
   </div></section>
-
-  <section class="s"><div class="si"><div class="src"><h3>Sources</h3><ol>
-    <li>National Audit Office (UK), "Investigation: WannaCry Cyber Attack and the NHS," October 2017.</li>
-    <li>Greenberg, A. "The Untold Story of the Colonial Pipeline Ransomware Attack." Wired, November 2021.</li>
-    <li>CISA Alert AA21-131A: DarkSide Ransomware, May 2021.</li>
-    <li>DOJ, Colonial Pipeline ransom seizure announcement, June 2021.</li>
-    <li>Senate Finance Committee, testimony of Andrew Witty (UHG CEO), May 1, 2024.</li>
-    <li>UnitedHealth Group, FY2024 earnings reports (cyberattack cost disclosures).</li>
-    <li>Kaspersky, "The complete story of the 2024 ransomware attack on UnitedHealth," February 2025.</li>
-  </ol></div></div></section>
 </div>
 
-<!-- ==================== U.S. FRAMEWORK ==================== -->
+<!-- U.S. FRAMEWORK -->
 <div class="pg" id="p-fw">
-  <div class="ph"><div class="ph-i"><div class="tag">U.S. Policy Framework</div><h1>A Patchwork of Authorities</h1><p class="desc">Built incrementally over two decades. Broad in aspiration, shallow in enforcement, with critical gaps that ransomware operators have repeatedly exploited.</p></div></div>
+  <div class="ph"><div class="ph-i"><div class="tag blue">U.S. Framework</div><h1>A Patchwork of Authorities</h1><p class="desc">Twenty years of cybersecurity policy, built crisis by crisis, with critical gaps that ransomware operators keep exploiting.</p></div></div>
 
   <section class="s"><div class="si">
     <div class="anav">
-      <a href="javascript:void(0)" onclick="document.getElementById('tl-section').scrollIntoView({behavior:'smooth'})">Timeline</a>
-      <a href="javascript:void(0)" onclick="document.getElementById('gaps-section').scrollIntoView({behavior:'smooth'})">Five Gaps</a>
-      <a href="javascript:void(0)" onclick="document.getElementById('nist-section').scrollIntoView({behavior:'smooth'})">NIST CSF 2.0</a>
+      <a href="javascript:void(0)" onclick="document.getElementById('tls').scrollIntoView({behavior:'smooth'})">Timeline</a>
+      <a href="javascript:void(0)" onclick="document.getElementById('gaps').scrollIntoView({behavior:'smooth'})">The Five Gaps</a>
+      <a href="javascript:void(0)" onclick="document.getElementById('nist').scrollIntoView({behavior:'smooth'})">NIST CSF</a>
     </div>
   </div></section>
 
-  <section class="s" id="tl-section"><div class="si">
-    <div class="tag teal">Evolution</div>
-    <h2>Key Policy Milestones</h2>
+  <section class="s" id="tls"><div class="si">
+    <div class="tag teal">Timeline</div>
+    <h2>How We Got Here</h2>
     <div class="tl">
-      <div class="tl-i"><div class="tl-d">2003</div><h3>HSPD-7 / National Strategy to Secure Cyberspace</h3><p>First formal national cybersecurity strategy. Voluntary public-private partnerships, no enforcement. Identified CI protection as priority but provided no tools to achieve it.</p></div>
-      <div class="tl-i"><div class="tl-d">2013</div><h3>PPD-21 + EO 13636</h3><p>Redesignated 16 CI sectors, assigned SRMAs. Directed NIST to develop the Cybersecurity Framework. Voluntary, non-binding, but became the most widely referenced standard globally.</p></div>
-      <div class="tl-i"><div class="tl-d">2015</div><h3>Cybersecurity Information Sharing Act</h3><p>Legal protections (liability shields, FOIA exemptions) for voluntary threat indicator sharing. Many companies remained reluctant due to liability, competitive, and regulatory concerns.</p></div>
-      <div class="tl-i"><div class="tl-d">2018</div><h3>CISA Established</h3><p>Former NPPD elevated to standalone DHS agency. Lead civilian cybersecurity coordination body. Can recommend, coordinate, assist. Cannot compel private sector action.</p></div>
-      <div class="tl-i"><div class="tl-d">2021</div><h3>Executive Order 14028</h3><p>Post-Colonial Pipeline and SolarWinds. Zero-trust for federal agencies, SBOMs, EDR requirements, incident reporting to CISA. Primarily limited to government systems and contractors.</p></div>
-      <div class="tl-i"><div class="tl-d">2022</div><h3>CIRCIA Signed</h3><p>First federal mandatory reporting: 72hr incidents, 24hr ransom payments. Delegated details to rulemaking. NPRM published April 2024, drew sharp industry criticism for breadth.</p></div>
-      <div class="tl-i"><div class="tl-d">2023</div><h3>National Cybersecurity Strategy</h3><p>Called for shifting burden to providers/operators and mandatory minimum standards. Endorsed using regulatory authority more aggressively. Implementation uneven after administration change.</p></div>
-      <div class="tl-i"><div class="tl-d">2025-26</div><h3>CIRCIA Delays</h3><p>Final rule pushed from October 2025 to May 2026. CISA conducting town hall sessions as of early 2026. DHS appropriations lapse disrupted even those town halls, making further delays likely. Four years after enactment, mandatory reporting still not operational.</p></div>
+      <div class="tl-i"><div class="tl-d">2003</div><h3>HSPD-7</h3><p>First national cybersecurity strategy. Identified CI protection as a priority but gave nobody the authority to actually require anything. Voluntary partnerships only.</p></div>
+      <div class="tl-i green"><div class="tl-d">2013</div><h3>PPD-21 + EO 13636</h3><p>Designated the 16 CI sectors and told NIST to build a Cybersecurity Framework. NIST CSF became the most widely used cybersecurity reference standard in the world, but it was always voluntary.</p></div>
+      <div class="tl-i"><div class="tl-d">2015</div><h3>Cybersecurity Information Sharing Act</h3><p>Created legal protections for companies that share threat data with the government. Good idea in theory, but voluntary participation meant uptake was limited.</p></div>
+      <div class="tl-i blue"><div class="tl-d">2018</div><h3>CISA Created</h3><p>DHS stood up a dedicated cybersecurity agency. CISA became the main coordinating body for civilian cybersecurity, but its powers are advisory. It can warn, help, and coordinate. It cannot compel.</p></div>
+      <div class="tl-i"><div class="tl-d">2021</div><h3>EO 14028</h3><p>The Colonial Pipeline response. Zero-trust mandates, software supply chain requirements, incident reporting. Significant but mostly applies to federal systems and government contractors, not private CI broadly.</p></div>
+      <div class="tl-i green"><div class="tl-d">2022</div><h3>CIRCIA</h3><p>First mandatory reporting law: 72 hours for incidents, 24 hours for ransom payments. But the details got punted to rulemaking, and that rulemaking has been delayed repeatedly.</p></div>
+      <div class="tl-i amber"><div class="tl-d">2025-26</div><h3>CIRCIA Still Not Done</h3><p>Final rule pushed to May 2026. CISA is running town halls in early 2026 to gather more industry input. A DHS funding lapse disrupted even those. Four years after the law passed, it still is not operational.</p></div>
     </div>
   </div></section>
 
-  <section class="s" id="gaps-section"><div class="si">
-    <div class="tag blue">Analysis</div>
-    <h2>Where the Framework Falls Short</h2>
-
-    <h3>1. Voluntarism</h3>
-    <p>The NIST CSF carries no legal obligation. Organizations can adopt it partially, selectively, or not at all. Financial services have binding GLBA requirements. Nuclear facilities have NRC rules. But healthcare relies on HIPAA (not updated since 2013, no specific technical mandates). Water systems (150,000+ public systems, mostly small) have almost no enforceable federal cybersecurity requirements at all.</p>
-
-    <h3>2. Sector Fragmentation</h3>
-    <p>16 sectors, 16 SRMAs, wildly different maturity levels and regulatory histories. No unified federal standard applies horizontally. TSA can now mandate pipeline cybersecurity but EPA lacks equivalent authority over water. National CI security is effectively set by the weakest sector, because attackers scan for and exploit whatever is most vulnerable regardless of which SRMA oversees it.</p>
-
-    <h3>3. CIRCIA Implementation Delays</h3>
-    <p>CIRCIA is genuine progress. But the NPRM drew 300,000+ entities into scope and provoked bipartisan criticism for exceeding congressional intent. Final rule pushed to May 2026 (at earliest) with additional town halls underway. DHS appropriations lapse disrupted March/April 2026 town halls. Four years after enactment, the government still lacks the comprehensive incident visibility CIRCIA was designed to provide.</p>
-
-    <h3>4. Limited Deterrence</h3>
-    <p>FBI infiltrated Hive for 7 months (providing decryption keys to 300+ victims) before seizing its infrastructure in January 2023. Seized ALPHV/BlackCat infrastructure in December 2023. But ALPHV reconstituted within weeks and hit Change Healthcare two months later. DarkSide rebranded as BlackMatter. New groups emerge rapidly from the same pool of experienced operators. Capability exists but is not applied with enough persistence to change the calculus.</p>
-
-    <h3>5. CISA's Authority Gap</h3>
-    <p>CISA's KEV catalog, Protective DNS, joint advisories, and incident response are widely respected. But CISA cannot require a hospital to patch a critical vulnerability, cannot mandate that a water utility implement MFA, cannot compel any private entity to take specific cybersecurity actions. Advisory-only. Effectiveness depends entirely on voluntary cooperation, which in cybersecurity has a well-documented track record of falling short.</p>
+  <section class="s" id="gaps"><div class="si">
+    <div class="tag red">Analysis</div>
+    <h2>The Five Gaps</h2>
+    <h3>1. Voluntary means optional</h3>
+    <p>NIST CSF is a good standard. The problem is that nobody has to follow it. Financial services have binding GLBA requirements. Nuclear facilities have NRC rules. But healthcare relies on HIPAA, which has not been meaningfully updated since 2013 and does not mandate anything as basic as multi-factor authentication. The water sector, with over 150,000 public systems (most of them tiny), has almost no enforceable federal cybersecurity requirements at all.</p>
+    <h3>2. Fragmentation across agencies</h3>
+    <p>Sixteen sectors, sixteen lead agencies, wildly different levels of maturity and regulatory authority. TSA can now mandate cybersecurity for pipelines (because Colonial Pipeline forced the issue), but EPA cannot do the same for water systems and HHS cannot require hospitals to turn on MFA. The weakest sector sets the bar for the whole country, because attackers will always go after whatever is easiest to hit.</p>
+    <h3>3. CIRCIA is years late</h3>
+    <p>CIRCIA was a real step forward. But four years between signing the law and having it actually take effect is too long when the threat is active and evolving. The NPRM drew criticism for trying to cover 300,000+ entities, the final rule got pushed from October 2025 to May 2026, and a DHS funding lapse has disrupted even the most recent round of industry engagement. In the meantime, the government still does not have systematic visibility into how often critical infrastructure is getting hit.</p>
+    <h3>4. Disruption without persistence</h3>
+    <p>The FBI infiltrated the Hive network for seven months before taking it down in January 2023, helping over 300 victims with decryption keys along the way. That was impressive. They also seized ALPHV/BlackCat infrastructure in December 2023. But ALPHV reconstituted within weeks and hit Change Healthcare two months later. Technical capability is there. What is missing is sustained, persistent pressure that actually changes the economics for these groups.</p>
+    <h3>5. CISA cannot compel anyone</h3>
+    <p>CISA does solid work: their KEV catalog, Protective DNS service, advisories, and incident response teams are well-regarded. But if CISA identifies a critical vulnerability being actively exploited across the healthcare sector, it can issue a warning. It cannot require anyone to actually patch. That gap between knowing what is wrong and being able to fix it is a fundamental structural problem.</p>
   </div></section>
 
-  <section class="s" id="nist-section"><div class="si">
-    <div class="tag blue">Deep Dive</div>
+  <section class="s" id="nist"><div class="si">
+    <div class="tag green">Framework</div>
     <h2>NIST CSF 2.0</h2>
-    <p>Updated February 2024. Six core functions (version 2.0 added Govern):</p>
-
-    <!-- NIST CSF Diagram -->
+    <p>Updated in February 2024, the framework organizes cybersecurity into six functions. Version 2.0 added Govern at the center to emphasize that leadership and risk management are foundational.</p>
     <div class="diagram">
-      <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" style="max-width:500px;width:100%">
-        <rect width="500" height="200" fill="none"/>
-        <!-- Center -->
-        <circle cx="250" cy="100" r="35" fill="none" stroke="#9e2a0f" stroke-width="1.5"/>
-        <text x="250" y="97" fill="#9e2a0f" font-family="Courier New" font-size="9" text-anchor="middle" font-weight="bold">GOVERN</text>
-        <text x="250" y="109" fill="#8a857d" font-family="Courier New" font-size="6.5" text-anchor="middle">(GV)</text>
-        <!-- Outer ring labels -->
-        <circle cx="250" cy="100" r="80" fill="none" stroke="#d5d0c8" stroke-width="1" stroke-dasharray="4,4"/>
-        <!-- Identify -->
-        <rect x="200" y="2" width="100" height="28" rx="2" fill="#fff" stroke="#3a3632" stroke-width="1"/>
-        <text x="250" y="15" fill="#3a3632" font-family="Courier New" font-size="8" text-anchor="middle">IDENTIFY (ID)</text>
-        <text x="250" y="25" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Asset mgmt, risk</text>
-        <!-- Protect -->
-        <rect x="370" y="45" width="110" height="28" rx="2" fill="#fff" stroke="#3a3632" stroke-width="1"/>
-        <text x="425" y="58" fill="#3a3632" font-family="Courier New" font-size="8" text-anchor="middle">PROTECT (PR)</text>
-        <text x="425" y="68" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Access ctrl, training</text>
-        <!-- Detect -->
-        <rect x="380" y="125" width="110" height="28" rx="2" fill="#fff" stroke="#3a3632" stroke-width="1"/>
-        <text x="435" y="138" fill="#3a3632" font-family="Courier New" font-size="8" text-anchor="middle">DETECT (DE)</text>
-        <text x="435" y="148" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Monitoring, analysis</text>
-        <!-- Respond -->
-        <rect x="195" y="170" width="110" height="28" rx="2" fill="#fff" stroke="#3a3632" stroke-width="1"/>
-        <text x="250" y="183" fill="#3a3632" font-family="Courier New" font-size="8" text-anchor="middle">RESPOND (RS)</text>
-        <text x="250" y="193" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">IR, comms, mitigation</text>
-        <!-- Recover -->
-        <rect x="20" y="125" width="110" height="28" rx="2" fill="#fff" stroke="#3a3632" stroke-width="1"/>
-        <text x="75" y="138" fill="#3a3632" font-family="Courier New" font-size="8" text-anchor="middle">RECOVER (RC)</text>
-        <text x="75" y="148" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Restoration, lessons</text>
-        <!-- lines to center -->
-        <line x1="250" y1="30" x2="250" y2="65" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="370" y1="59" x2="285" y2="85" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="380" y1="139" x2="285" y2="115" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="250" y1="170" x2="250" y2="135" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="130" y1="139" x2="215" y2="115" stroke="#d5d0c8" stroke-width="1"/>
+      <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
+        <circle cx="280" cy="125" r="45" fill="#2d7d460a" stroke="#2d7d46" stroke-width="2"/>
+        <text x="280" y="121" fill="#2d7d46" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">GOVERN</text>
+        <text x="280" y="137" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">(new in 2.0)</text>
+        <circle cx="280" cy="125" r="100" fill="none" stroke="#d5d0c8" stroke-width="1.5" stroke-dasharray="6,5"/>
+        <rect x="228" y="2" width="104" height="36" rx="3" fill="#fff" stroke="#1a1714" stroke-width="1.5"/>
+        <text x="280" y="18" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">IDENTIFY</text>
+        <text x="280" y="32" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Assets, risk</text>
+        <rect x="430" y="58" width="115" height="36" rx="3" fill="#fff" stroke="#2456a4" stroke-width="1.5"/>
+        <text x="487" y="74" fill="#2456a4" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">PROTECT</text>
+        <text x="487" y="88" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Access, training</text>
+        <rect x="440" y="155" width="115" height="36" rx="3" fill="#fff" stroke="#1a7a6d" stroke-width="1.5"/>
+        <text x="497" y="171" fill="#1a7a6d" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">DETECT</text>
+        <text x="497" y="185" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Monitoring</text>
+        <rect x="228" y="212" width="104" height="36" rx="3" fill="#fff" stroke="#a67c00" stroke-width="1.5"/>
+        <text x="280" y="228" fill="#a67c00" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">RESPOND</text>
+        <text x="280" y="242" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">IR, comms</text>
+        <rect x="15" y="155" width="115" height="36" rx="3" fill="#fff" stroke="#9e2a0f" stroke-width="1.5"/>
+        <text x="72" y="171" fill="#9e2a0f" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">RECOVER</text>
+        <text x="72" y="185" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Restoration</text>
+        <line x1="280" y1="38" x2="280" y2="80" stroke="#d5d0c8" stroke-width="1"/>
+        <line x1="430" y1="76" x2="325" y2="105" stroke="#d5d0c8" stroke-width="1"/>
+        <line x1="440" y1="173" x2="325" y2="148" stroke="#d5d0c8" stroke-width="1"/>
+        <line x1="280" y1="212" x2="280" y2="170" stroke="#d5d0c8" stroke-width="1"/>
+        <line x1="130" y1="173" x2="235" y2="148" stroke="#d5d0c8" stroke-width="1"/>
       </svg>
-      <div class="diagram-c">Fig 5. NIST Cybersecurity Framework 2.0 core functions. Govern (new in 2.0) sits at the center, establishing organizational context for the five operational functions.</div>
+      <div class="diagram-c">NIST CSF 2.0 core functions.</div>
     </div>
-
-    <p>Widely praised for flexibility and comprehensiveness. Adopted globally by regulators, auditors, insurers. But flexibility is the core limitation for CI: organizations retain wide latitude to define "appropriate" implementation. A healthcare system can claim NIST CSF alignment while still lacking MFA, running unpatched systems, and having no tested backup plan. The framework describes what good cybersecurity looks like. It does not require it.</p>
+    <p>The framework is well-built and widely adopted. But for critical infrastructure, the flexibility that makes it useful also makes it toothless: an organization can claim alignment with NIST CSF while still running unpatched systems, having no MFA on remote access, and never testing its backups. The framework says what good looks like. It does not make anyone do it.</p>
   </div></section>
-
-  <section class="s"><div class="si"><div class="src"><h3>Sources</h3><ol>
-    <li>NIST, "Cybersecurity Framework 2.0," NIST CSWP 29, February 2024.</li>
-    <li>White House, EO 14028, May 2021.</li>
-    <li>White House, National Cybersecurity Strategy, March 2023.</li>
-    <li>CISA, CIRCIA rulemaking documents and FAQ.</li>
-    <li>GAO, "Critical Infrastructure Protection," GAO-23-105103, 2023.</li>
-    <li>CyberScoop, "CISA pushes final cyber incident reporting rule to May 2026," September 2025.</li>
-    <li>CISA, CIRCIA Town Hall notice, Federal Register, February 13, 2026.</li>
-  </ol></div></div></section>
 </div>
 
-<!-- ==================== UK COMPARISON ==================== -->
+<!-- UK COMPARISON -->
 <div class="pg" id="p-uk">
-  <div class="ph"><div class="ph-i"><div class="tag">Comparative Analysis</div><h1>The UK Approach</h1><p class="desc">Centralized coordination, mandatory standards, active operational defence. Not directly transplantable but addresses the specific structural gaps exposed by WannaCry, Colonial Pipeline, and Change Healthcare.</p></div></div>
+  <div class="ph"><div class="ph-i"><div class="tag teal">UK Comparison</div><h1>What the UK Built Instead</h1><p class="desc">A centralized agency, mandatory standards, and active defense at national scale. Not perfect, but it addresses the specific gaps that keep showing up in the U.S. case studies.</p></div></div>
 
   <section class="s"><div class="si">
-    <div class="tag blue">Institutional Design</div>
-    <h2>The National Cyber Security Centre</h2>
-    <p>Established October 2016 as a publicly facing branch of GCHQ (UK signals intelligence). This is deliberate: the lead cybersecurity coordination body gets direct, real-time access to intelligence while simultaneously serving as the government's primary interface with the private sector on defensive cybersecurity.</p>
-    <p>The NCSC provides threat assessments, manages national incident response, publishes actionable technical guidance, and operates the Active Cyber Defence (ACD) program: automated tools that proactively block malicious activity at national scale. ACD includes Protective DNS (blocks known malicious domains), takedown services (removes phishing sites and malware on UK infrastructure), and Mail Check (deploys DMARC/SPF/DKIM email authentication).</p>
+    <div class="tag blue">The NCSC</div>
+    <h2>One Agency, Not Seven</h2>
+    <p>The UK set up the National Cyber Security Centre in 2016 as a public-facing arm of GCHQ (their signals intelligence agency). That placement matters: the country's lead cybersecurity body has direct access to intelligence capabilities while also being the main point of contact for businesses, hospitals, and everyone else on defensive cybersecurity.</p>
+    <p>The NCSC runs the Active Cyber Defence program, which automatically blocks known malicious domains, takes down phishing sites hosted on UK infrastructure, and deploys email authentication standards at national scale. These are not just advisories. They are operational tools running across UK networks, providing a baseline layer of defense that individual organizations do not have to build themselves.</p>
+    <p>Compare that to the U.S., where the same set of responsibilities gets split across CISA, NSA, FBI, Secret Service, and a dozen sector-specific regulators, each with different authorities, budgets, classification levels, and institutional priorities.</p>
 
-    <!-- US vs UK Institutional Diagram -->
     <div class="diagram">
-      <svg viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg" style="max-width:660px;width:100%">
-        <rect width="660" height="220" fill="none"/>
-        <!-- US side -->
-        <text x="165" y="15" fill="#9e2a0f" font-family="Courier New" font-size="9" text-anchor="middle" font-weight="bold">UNITED STATES</text>
-        <rect x="20" y="30" width="130" height="35" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-        <text x="85" y="48" fill="#3a3632" font-family="Courier New" font-size="7.5" text-anchor="middle">CISA (DHS)</text>
-        <text x="85" y="58" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Advisory only</text>
-        <rect x="170" y="30" width="130" height="35" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-        <text x="235" y="48" fill="#3a3632" font-family="Courier New" font-size="7.5" text-anchor="middle">NSA/CSS</text>
-        <text x="235" y="58" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Intel + mil cyber</text>
-        <rect x="20" y="80" width="130" height="35" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-        <text x="85" y="98" fill="#3a3632" font-family="Courier New" font-size="7.5" text-anchor="middle">FBI</text>
-        <text x="85" y="108" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Law enforcement</text>
-        <rect x="170" y="80" width="130" height="35" rx="2" fill="none" stroke="#3a3632" stroke-width="1"/>
-        <text x="235" y="98" fill="#3a3632" font-family="Courier New" font-size="7.5" text-anchor="middle">SECTOR REGULATORS</text>
-        <text x="235" y="108" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">TSA, EPA, HHS, NRC...</text>
-        <text x="165" y="140" fill="#8a857d" font-family="Courier New" font-size="7" text-anchor="middle" font-style="italic">Fragmented. Different authorities,</text>
-        <text x="165" y="151" fill="#8a857d" font-family="Courier New" font-size="7" text-anchor="middle" font-style="italic">cultures, classification levels.</text>
-        <!-- Divider -->
-        <line x1="330" y1="10" x2="330" y2="210" stroke="#d5d0c8" stroke-width="1" stroke-dasharray="4,4"/>
-        <!-- UK side -->
-        <text x="495" y="15" fill="#9e2a0f" font-family="Courier New" font-size="9" text-anchor="middle" font-weight="bold">UNITED KINGDOM</text>
-        <rect x="395" y="30" width="200" height="85" rx="2" fill="none" stroke="#9e2a0f" stroke-width="1.5"/>
-        <text x="495" y="52" fill="#9e2a0f" font-family="Courier New" font-size="9" text-anchor="middle">NCSC</text>
-        <text x="495" y="65" fill="#3a3632" font-family="Courier New" font-size="7" text-anchor="middle">(Branch of GCHQ)</text>
-        <text x="495" y="82" fill="#8a857d" font-family="Courier New" font-size="6.5" text-anchor="middle">Intel + Defence + Guidance +</text>
-        <text x="495" y="92" fill="#8a857d" font-family="Courier New" font-size="6.5" text-anchor="middle">Incident Response + ACD</text>
-        <text x="495" y="106" fill="#8a857d" font-family="Courier New" font-size="6.5" text-anchor="middle">ALL IN ONE BODY</text>
-        <text x="495" y="140" fill="#8a857d" font-family="Courier New" font-size="7" text-anchor="middle" font-style="italic">Centralized. Single authority.</text>
-        <text x="495" y="151" fill="#8a857d" font-family="Courier New" font-size="7" text-anchor="middle" font-style="italic">Intel informs defense in real-time.</text>
-        <!-- Bottom labels -->
-        <rect x="20" y="170" width="280" height="35" rx="2" fill="#9e2a0f10" stroke="#9e2a0f" stroke-width="1" stroke-dasharray="4,3"/>
-        <text x="160" y="188" fill="#9e2a0f" font-family="Courier New" font-size="7" text-anchor="middle">COORDINATION FRICTION</text>
-        <text x="160" y="199" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Delays in translating intel to defensive action</text>
-        <rect x="375" y="170" width="240" height="35" rx="2" fill="#2a7a4a18" stroke="#1a7a6d" stroke-width="1" stroke-dasharray="4,3"/>
-        <text x="495" y="188" fill="#1a7a6d" font-family="Courier New" font-size="7" text-anchor="middle">REDUCED FRICTION</text>
-        <text x="495" y="199" fill="#8a857d" font-family="Courier New" font-size="6" text-anchor="middle">Single chain of command, immediate intel access</text>
+      <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" style="max-width:720px;width:100%">
+        <text x="175" y="16" fill="#9e2a0f" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">UNITED STATES</text>
+        <rect x="20" y="28" width="145" height="44" rx="3" fill="#fff" stroke="#3d3833" stroke-width="1.5"/>
+        <text x="92" y="49" fill="#1a1714" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">CISA</text>
+        <text x="92" y="63" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Advisory only</text>
+        <rect x="185" y="28" width="145" height="44" rx="3" fill="#fff" stroke="#3d3833" stroke-width="1.5"/>
+        <text x="257" y="49" fill="#1a1714" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">NSA</text>
+        <text x="257" y="63" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Intel + military</text>
+        <rect x="20" y="84" width="145" height="44" rx="3" fill="#fff" stroke="#3d3833" stroke-width="1.5"/>
+        <text x="92" y="105" fill="#1a1714" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">FBI</text>
+        <text x="92" y="119" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Law enforcement</text>
+        <rect x="185" y="84" width="145" height="44" rx="3" fill="#fff" stroke="#3d3833" stroke-width="1.5"/>
+        <text x="257" y="105" fill="#1a1714" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">SECTOR REGS</text>
+        <text x="257" y="119" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">TSA, EPA, HHS...</text>
+        <text x="175" y="152" fill="#9e2a0f" font-family="DM Sans,sans-serif" font-size="11" text-anchor="middle" font-style="italic">Fragmented</text>
+        <line x1="360" y1="12" x2="360" y2="190" stroke="#d5d0c8" stroke-width="1" stroke-dasharray="6,4"/>
+        <text x="540" y="16" fill="#2d7d46" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">UNITED KINGDOM</text>
+        <rect x="415" y="28" width="250" height="100" rx="3" fill="#2d7d460a" stroke="#2d7d46" stroke-width="2"/>
+        <text x="540" y="58" fill="#2d7d46" font-family="Courier New,monospace" font-size="16" text-anchor="middle" font-weight="bold">NCSC</text>
+        <text x="540" y="76" fill="#3d3833" font-family="DM Sans,sans-serif" font-size="11" text-anchor="middle">Part of GCHQ</text>
+        <text x="540" y="96" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Intel + defense + guidance + incident</text>
+        <text x="540" y="112" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">response + active cyber defence</text>
+        <text x="540" y="152" fill="#2d7d46" font-family="DM Sans,sans-serif" font-size="11" text-anchor="middle" font-style="italic">Centralized</text>
       </svg>
-      <div class="diagram-c">Fig 6. U.S. vs. UK institutional architecture for cybersecurity. The U.S. distributes responsibilities across multiple agencies; the UK centralizes them in the NCSC.</div>
+      <div class="diagram-c">U.S. vs. UK institutional structure.</div>
     </div>
   </div></section>
 
   <section class="s"><div class="si">
-    <div class="tag teal">Regulatory Framework</div>
-    <h2>NIS Regulations + Cyber Assessment Framework</h2>
-    <p>The NIS Regulations (2018, updated 2022) impose mandatory cybersecurity on operators of essential services in energy, transport, health, water, and digital infrastructure. Competent authorities (Ofgem, Ofcom, DHSC) can inspect, issue enforcement notices, and impose fines up to £17 million. The 2022 update added managed service providers to scope, recognizing supply chain risk.</p>
-    <p>The NCSC's Cyber Assessment Framework (CAF) provides the assessment methodology. Four objectives: managing security risk, protecting against attack, detecting events, minimising impact. Explicitly outcomes-based: does not mandate specific technologies, requires demonstrated security outcomes. Preserves flexibility while establishing an auditable, enforceable baseline.</p>
+    <div class="tag green">Standards</div>
+    <h2>NIS Regulations + the CAF</h2>
+    <p>The UK's NIS Regulations (2018, updated 2022) require operators of essential services in energy, transport, health, water, and digital infrastructure to meet mandatory cybersecurity standards. Sector regulators like Ofgem and Ofcom can inspect, issue enforcement notices, and fine organizations up to 17 million pounds.</p>
+    <p>The assessment tool is the Cyber Assessment Framework (CAF), developed by the NCSC. It is outcomes-based: instead of telling organizations which specific software to buy, it requires them to demonstrate that they are achieving defined security outcomes. This keeps things flexible without making compliance optional.</p>
   </div></section>
 
   <section class="s"><div class="si w">
     <div class="tag amber">Side by Side</div>
-    <h2>U.S. vs. UK</h2>
+    <h2>U.S. vs. UK at a Glance</h2>
     <div class="tw"><table class="tb">
-      <thead><tr><th>Dimension</th><th>United States</th><th>United Kingdom</th></tr></thead>
+      <thead><tr><th></th><th>United States</th><th>United Kingdom</th></tr></thead>
       <tbody>
-        <tr><td><strong>Lead Agency</strong></td><td>CISA (advisory, coordinates across NSA/FBI/regulators)</td><td>NCSC (centralized, intel + defence in one body)</td></tr>
-        <tr><td><strong>Standards</strong></td><td>Mostly voluntary (NIST CSF). Binding only for finance, nuclear, pipelines.</td><td>NIS Regs: mandatory for all essential services.</td></tr>
-        <tr><td><strong>Reporting</strong></td><td>CIRCIA mandated but final rule delayed to May 2026+.</td><td>NIS mandatory notification + NCSC voluntary channel.</td></tr>
-        <tr><td><strong>Enforcement</strong></td><td>Limited. CISA has no regulatory authority over private sector.</td><td>Fines to £17M. Enforcement notices. Inspections.</td></tr>
-        <tr><td><strong>Active Defence</strong></td><td>Some offensive ops. CISA Protective DNS (limited scale).</td><td>ACD: national-scale blocking, takedowns, email auth.</td></tr>
-        <tr><td><strong>Assessment</strong></td><td>NIST CSF (voluntary). CMMC (defense only).</td><td>CAF: outcomes-based, mandatory, used for compliance.</td></tr>
+        <tr><td><strong>Lead agency</strong></td><td>CISA (advisory, coordinates across many agencies)</td><td>NCSC (centralized, intel + defense in one body)</td></tr>
+        <tr><td><strong>Standards</strong></td><td>Mostly voluntary. Binding only for finance, nuclear, pipelines.</td><td>NIS Regs: mandatory for all essential services.</td></tr>
+        <tr><td><strong>Reporting</strong></td><td>CIRCIA mandated but still not in effect (May 2026 at earliest).</td><td>NIS requires notification. NCSC also takes voluntary reports.</td></tr>
+        <tr><td><strong>Enforcement</strong></td><td>Limited. CISA has no regulatory authority over private sector.</td><td>Fines up to 17M pounds. Enforcement notices. Inspections.</td></tr>
+        <tr><td><strong>Active defense</strong></td><td>Some offensive ops. CISA Protective DNS at limited scale.</td><td>ACD program: national-scale automated blocking + takedowns.</td></tr>
       </tbody>
     </table></div>
   </div></section>
 
   <section class="s"><div class="si">
-    <div class="tag">Takeaways</div>
-    <h2>What Translates</h2>
-    <p><strong>Centralization reduces friction.</strong> The NCSC's single-authority model eliminates inter-agency coordination problems. The U.S. could strengthen CISA's mandate without replicating GCHQ's structure.</p>
-    <p><strong>Mandatory baselines are achievable.</strong> NIS proves enforceable standards work without stifling innovation. The CAF's outcomes approach could adapt to U.S. sectors under voluntary frameworks.</p>
-    <p><strong>Active defence at scale works.</strong> ACD has blocked millions of malicious emails and taken down hundreds of thousands of phishing sites annually. The U.S. has the capability but has not deployed it at comparable scale.</p>
-    <p><strong>What doesn't translate directly:</strong> the U.S. is vastly larger, has deeper political resistance to centralized regulation, and maintains an intelligence/civilian separation that reflects legitimate civil liberties concerns. But the specific capabilities (mandatory baselines, active defence, coordinating authority) are adaptable without replicating the UK's institutional structure.</p>
+    <div class="tag green">Takeaways</div>
+    <h2>What Actually Translates</h2>
+    <p>The UK model cannot be copy-pasted onto the U.S. The country is smaller, the politics around regulation are different, and housing a civilian cybersecurity agency inside a signals intelligence service raises civil liberties issues that do not apply the same way here. But several specific elements address exactly the weaknesses exposed in the three case studies:</p>
+    <p><strong>Mandatory baselines are doable.</strong> The NIS Regulations show you can impose enforceable standards on critical infrastructure without killing innovation. The CAF's outcomes-based approach is a template that could work in U.S. sectors currently operating under voluntary frameworks.</p>
+    <p><strong>Active defense at scale works.</strong> The ACD program blocks millions of malicious emails and takes down hundreds of thousands of phishing sites a year. The U.S. has the technical ability to do this but has not deployed it at anything close to the same scale.</p>
+    <p><strong>One authority is faster than seven.</strong> When the NCSC identifies a threat, the response is immediate because everything sits in the same organization. In the U.S., the same process involves coordination across CISA, NSA, FBI, and whichever sector regulator happens to be relevant, with all the friction that implies.</p>
   </div></section>
-
-  <section class="s"><div class="si"><div class="src"><h3>Sources</h3><ol>
-    <li>NCSC, "About the NCSC," institutional overview.</li>
-    <li>NCSC, "Active Cyber Defence: The Fourth Year," 2021.</li>
-    <li>UK Government, NIS Regulations 2018 (SI 2018/506, amended SI 2022/784).</li>
-    <li>NCSC, CAF v3.2 guidance documentation.</li>
-    <li>House of Commons JCNSS, "A hostage to fortune: ransomware and UK national security," December 2023.</li>
-  </ol></div></div></section>
 </div>
 
-<!-- ==================== RECOMMENDATIONS ==================== -->
+<!-- RECOMMENDATIONS -->
 <div class="pg" id="p-recs">
-  <div class="ph"><div class="ph-i"><div class="tag">Recommendations</div><h1>A Path Forward</h1><p class="desc">The same failures recur across all three cases. Six recommendations, each grounded in the case study evidence and the comparative UK analysis.</p></div></div>
+  <div class="ph"><div class="ph-i"><div class="tag amber">Recommendations</div><h1>Six Things That Should Change</h1><p class="desc">Each one is grounded in the case studies and the UK comparison. None of them require inventing new technology. They require political will.</p></div></div>
 
   <section class="s"><div class="si w">
     <div class="cards" style="grid-template-columns:1fr 1fr 1fr">
-      <div class="card" onclick="document.getElementById('r1').scrollIntoView({behavior:'smooth'})"><div class="card-n">REC 01</div><h3>Mandatory Standards</h3><p>Outcomes-based baselines for all 16 CI sectors.</p></div>
-      <div class="card" onclick="document.getElementById('r2').scrollIntoView({behavior:'smooth'})"><div class="card-n blue">REC 02</div><h3>Accelerate CIRCIA</h3><p>Finalize rulemaking. Close the reporting gap.</p></div>
-      <div class="card" onclick="document.getElementById('r3').scrollIntoView({behavior:'smooth'})"><div class="card-n teal">REC 03</div><h3>Strengthen CISA</h3><p>Binding directives during active incidents.</p></div>
-      <div class="card" onclick="document.getElementById('r4').scrollIntoView({behavior:'smooth'})"><div class="card-n amber">REC 04</div><h3>Concentration Risk</h3><p>"Systemically important" designations for digital CI.</p></div>
-      <div class="card" onclick="document.getElementById('r5').scrollIntoView({behavior:'smooth'})"><div class="card-n blue">REC 05</div><h3>Active Defence</h3><p>National-scale ACD + sustained ransomware disruption.</p></div>
-      <div class="card" onclick="document.getElementById('r6').scrollIntoView({behavior:'smooth'})"><div class="card-n">REC 06</div><h3>Reform VEP</h3><p>Legislate. Independent review. Default to disclosure.</p></div>
+      <div class="card" onclick="document.getElementById('r1').scrollIntoView({behavior:'smooth'})"><div class="card-n">01</div><h3>Mandatory Standards</h3><p>Outcomes-based baselines for all 16 sectors.</p></div>
+      <div class="card" onclick="document.getElementById('r2').scrollIntoView({behavior:'smooth'})"><div class="card-n blue">02</div><h3>Finish CIRCIA</h3><p>Close the reporting gap.</p></div>
+      <div class="card" onclick="document.getElementById('r3').scrollIntoView({behavior:'smooth'})"><div class="card-n green">03</div><h3>Give CISA Teeth</h3><p>Binding directives in emergencies.</p></div>
+      <div class="card" onclick="document.getElementById('r4').scrollIntoView({behavior:'smooth'})"><div class="card-n amber">04</div><h3>Concentration Risk</h3><p>Systemically important designations.</p></div>
+      <div class="card" onclick="document.getElementById('r5').scrollIntoView({behavior:'smooth'})"><div class="card-n green">05</div><h3>Active Defense</h3><p>National-scale ACD + sustained disruption.</p></div>
+      <div class="card" onclick="document.getElementById('r6').scrollIntoView({behavior:'smooth'})"><div class="card-n">06</div><h3>Fix the VEP</h3><p>Legislate it. Default to disclosure.</p></div>
     </div>
   </div></section>
 
   <section class="s" id="r1"><div class="si">
-    <div class="tag">Rec 01</div>
-    <h2>Mandate Minimum Standards for All CI Sectors</h2>
-    <p>Congress should require all 16 sectors to meet enforceable, outcomes-based baselines modeled on the UK's CAF. At minimum: MFA on all remote access and privileged accounts; timely patching per CISA's KEV catalog; IT/OT segmentation; encrypted, tested backups; annually reviewed IR plan; basic supply chain risk management.</p>
-    <p>SRMAs must be empowered and funded to assess compliance with graduated penalties. The current asymmetry (TSA mandates for pipelines but EPA cannot for water, HHS cannot require hospitals to implement MFA) is exploitable. For small, resource-constrained entities, pair mandates with federal grants and technical assistance.</p>
-    <div class="pq"><p>The question is no longer whether mandatory standards are appropriate for critical infrastructure. The case studies settled that debate. The question is how to design them: enforceable, proportionate, adaptable.</p></div>
+    <div class="tag">01</div>
+    <h2>Mandatory Minimum Standards for Every CI Sector</h2>
+    <p>Congress should require all sixteen sectors to meet enforceable, outcomes-based cybersecurity baselines modeled on the UK's CAF. At minimum: MFA on all remote access, patching of CISA's Known Exploited Vulnerabilities within defined timeframes, IT/OT network segmentation, encrypted and tested backups, and an annually exercised incident response plan.</p>
+    <p>The agencies responsible for each sector need the authority and funding to actually check compliance and impose penalties when organizations fall short. Right now TSA can mandate pipeline security but EPA cannot do the same for water and HHS cannot require hospitals to use MFA. For smaller organizations that genuinely lack resources, pair the requirements with federal grants and technical assistance. But the baseline itself should not be optional.</p>
+    <div class="pq"><p>Whether mandatory standards are appropriate for critical infrastructure is not really a question anymore. The case studies settled it. The real question is how to design them so they are proportionate, enforceable, and adaptable across sixteen very different sectors.</p></div>
   </div></section>
 
   <section class="s" id="r2"><div class="si">
-    <div class="tag blue">Rec 02</div>
-    <h2>Accelerate CIRCIA Implementation</h2>
-    <p>Four years between enactment and projected implementation is too long for an active threat. Final rule needs clear definitions, minimal ambiguity, strong legal protections for candid disclosure. Extend mandatory reporting to ransomware payments in a centralized database accessible to law enforcement, intelligence, and Treasury/OFAC. Comprehensive payment flow data is essential for disrupting the crypto infrastructure that sustains the ransomware economy.</p>
+    <div class="tag blue">02</div>
+    <h2>Finish CIRCIA</h2>
+    <p>Four years between passing a law and having it take effect is not acceptable when the threat it was designed to address is actively getting worse. CISA needs to finalize the rulemaking with clear definitions, workable scope, and strong legal protections so that companies actually report honestly rather than treating compliance as a liability exercise. The reporting data also needs to cover ransom payments specifically, in a centralized database that law enforcement and Treasury can use to trace and disrupt the financial flows keeping the ransomware economy alive.</p>
   </div></section>
 
   <section class="s" id="r3"><div class="si">
-    <div class="tag teal">Rec 03</div>
-    <h2>Strengthen CISA's Coordinating Authority</h2>
-    <p>Grant CISA authority to issue binding operational directives to CI operators during active incidents (analogous to existing BOD authority over federal agencies). Empower CISA to conduct compliance assessments and refer persistent non-compliance to sector regulators. Not a traditional regulator, but no longer purely advisory.</p>
+    <div class="tag green">03</div>
+    <h2>Give CISA Real Authority</h2>
+    <p>CISA should be able to issue binding operational directives to critical infrastructure operators during active incidents, the same way it already can for federal agencies. If there is a vulnerability being actively exploited across the healthcare sector right now, CISA should be able to require patching, not just suggest it. This does not mean turning CISA into a traditional regulator for every sector. It means giving it emergency powers and the ability to refer persistent non-compliance to the relevant sector agency for enforcement.</p>
   </div></section>
 
   <section class="s" id="r4"><div class="si">
-    <div class="tag amber">Rec 04</div>
-    <h2>Address Systemic Concentration Risk</h2>
-    <p>Develop "systemically important" designations for digital infrastructure entities, analogous to SIFIs in banking post-2008. Change Healthcare processed ~1/3 of all U.S. health transactions. Colonial Pipeline carried 45% of East Coast fuel. These are not ordinary companies with ordinary risk profiles. Heightened requirements: mandatory resilience testing, redundancy planning, enhanced IR obligations, potentially structural requirements around processing redundancy.</p>
+    <div class="tag amber">04</div>
+    <h2>Designate Systemically Important CI Entities</h2>
+    <p>Change Healthcare processed about a third of all U.S. healthcare transactions. Colonial Pipeline carried 45% of East Coast fuel. When entities like that go down, entire sectors seize up. Current regulations treat every organization the same and do not account for systemic concentration risk. We need something like the SIFI designation from banking after 2008: identify the entities whose failure would cascade across a sector, and subject them to heightened requirements around resilience testing, redundancy, and incident response. These are not ordinary companies and should not be regulated as though they are.</p>
   </div></section>
 
   <section class="s" id="r5"><div class="si">
-    <div class="tag blue">Rec 05</div>
-    <h2>Active Defence + Sustained Disruption</h2>
-    <p>Build national-scale ACD modeled on NCSC: proactive blocking of malicious domains, C2 infrastructure, phishing at network level. CISA's Protective DNS and JCDC are foundations but not at UK scale. Simultaneously, DOJ/FBI must intensify sustained disruption. The Hive infiltration (7 months inside, 300+ victims helped) shows what patience achieves. The Joint Ransomware Task Force needs permanent resourcing, staffing, and mandate for continuous operational pressure.</p>
+    <div class="tag green">05</div>
+    <h2>Build Active Defense at Scale</h2>
+    <p>The UK's ACD program blocks malicious domains, takes down phishing sites, and deploys email authentication across the whole country, mostly automatically. The U.S. has the technical ability to do this. CISA's Protective DNS is a start, but it is nowhere near UK scale. Build it out. At the same time, keep up the offensive disruption. The FBI's Hive operation (seven months inside, 300+ victims helped) showed what patient, sustained disruption can accomplish. Fund the Joint Ransomware Task Force permanently and give it the mandate to maintain continuous pressure.</p>
   </div></section>
 
   <section class="s" id="r6"><div class="si">
-    <div class="tag">Rec 06</div>
-    <h2>Reform the Vulnerabilities Equities Process</h2>
-    <p>Congress should legislate the VEP. Statutory criteria for disclosure decisions. Independent review mechanism (PCLOB or similar). Regular classified reporting to intelligence committees on volume and disposition of vulnerabilities retained. Default presumption: disclosure. Offensive value degrades as systems are upgraded. Defensive risk persists as long as vulnerable systems remain in operation. WannaCry was a direct consequence of getting this balance wrong.</p>
+    <div class="tag">06</div>
+    <h2>Legislate the VEP</h2>
+    <p>WannaCry happened in large part because the NSA found a vulnerability and decided to keep it as a weapon instead of telling Microsoft so it could be patched. The Vulnerabilities Equities Process, which is supposed to govern that tradeoff, has no statutory basis, no independent oversight, and no public accountability. Congress should put it in law with clear criteria for when disclosure should happen (default: disclose), an independent review mechanism, and regular reporting to the intelligence committees. Offensive value degrades over time as systems get upgraded. Defensive risk persists as long as vulnerable systems are still running.</p>
   </div></section>
 
-  <div class="band"><p>Ransomware is not an unsolvable problem. It is a policy failure, one that persists because costs distribute across millions of victims while reform requires concentrated political will. The tools exist. What is missing is the sustained commitment to use them.</p></div>
+  <div class="band"><p>Ransomware is not some unstoppable force of nature. It is a policy failure. The costs get spread across millions of victims while fixing it requires the kind of concentrated political effort that is hard to sustain. But the tools exist. The knowledge exists. What has been missing, consistently, is the will to actually use them.</p></div>
+</div>
 
-  <section class="s"><div class="si"><div class="src"><h3>Sources</h3><ol>
-    <li>White House, National Cybersecurity Strategy, March 2023.</li>
-    <li>Cyberspace Solarium Commission, Final Report, March 2020.</li>
-    <li>IST Ransomware Task Force, "Combating Ransomware," April 2021.</li>
-    <li>DOJ, Hive ransomware disruption announcement, January 2023.</li>
-    <li>NCSC, ACD programme reports.</li>
-    <li>White House, VEP Charter, November 2017.</li>
-    <li>Schneier, Bruce. Click Here to Kill Everybody. Norton, 2018.</li>
-  </ol></div></div></section>
+<!-- REFERENCES -->
+<div class="pg" id="p-refs">
+  <div class="ph"><div class="ph-i"><div class="tag green">References</div><h1>Sources</h1></div></div>
+
+  <section class="s"><div class="si">
+    <h2>Government &amp; Institutional Sources</h2>
+    <p>White House. "Executive Order 14028: Improving the Nation's Cybersecurity." May 12, 2021.</p>
+    <p>White House. "National Cybersecurity Strategy." March 2023.</p>
+    <p>White House. "Vulnerabilities Equities Policy and Process for the United States Government." November 2017.</p>
+    <p>U.S. Senate Finance Committee. Hearing: "Hacking America's Health Care." Testimony of Andrew Witty, CEO, UnitedHealth Group. May 1, 2024.</p>
+    <p>CISA. "Alert (AA21-131A): DarkSide Ransomware." May 2021.</p>
+    <p>CISA. "Cyber Incident Reporting for Critical Infrastructure Act of 2022 (CIRCIA)." Rulemaking documents, NPRM (April 2024), FAQ, Town Hall notices (February 2026).</p>
+    <p>U.S. Department of Justice. "Department of Justice Seizes $2.3 Million in Cryptocurrency Paid to Darkside." June 7, 2021.</p>
+    <p>U.S. Department of Justice. "U.S. Department of Justice Disrupts Hive Ransomware Variant." January 26, 2023.</p>
+    <p>Government Accountability Office. "Critical Infrastructure Protection: Actions Needed to Address Significant Weaknesses." GAO-23-105103. 2023.</p>
+    <p>Congressional Research Service. "CIRCIA: Notice of Proposed Rule Making: In Brief." R48025. 2024.</p>
+    <p>NIST. "Cybersecurity Framework 2.0." NIST CSWP 29. February 2024.</p>
+    <p>National Audit Office (UK). "Investigation: WannaCry Cyber Attack and the NHS." October 2017.</p>
+    <p>UK Government. "The Network and Information Systems Regulations 2018." SI 2018/506, as amended by SI 2022/784.</p>
+    <p>House of Commons Joint Committee on the National Security Strategy. "A hostage to fortune: ransomware and UK national security." December 2023.</p>
+    <p>NCSC. "About the NCSC." Institutional overview.</p>
+    <p>NCSC. "Active Cyber Defence: The Fourth Year." 2021.</p>
+    <p>NCSC. "Cyber Assessment Framework (CAF)." Version 3.2.</p>
+  </div></section>
+
+  <section class="s"><div class="si">
+    <h2>Industry &amp; Financial</h2>
+    <p>UnitedHealth Group. Quarterly Earnings Reports Q1-Q4 FY2024. Cyberattack cost disclosures totaling $3.09 billion.</p>
+    <p>HHS Office for Civil Rights. Change Healthcare breach notification filings. 2024.</p>
+    <p>American Hospital Association. "Change Healthcare Cyberattack." Resource page. 2024.</p>
+  </div></section>
+
+  <section class="s"><div class="si">
+    <h2>Journalism &amp; Analysis</h2>
+    <p>Greenberg, Andy. "The Untold Story of the Colonial Pipeline Ransomware Attack." <em>Wired.</em> November 2021.</p>
+    <p>CyberScoop. "CISA pushes final cyber incident reporting rule to May 2026." September 8, 2025.</p>
+    <p>Kaspersky. "The complete story of the 2024 ransomware attack on UnitedHealth." February 2025.</p>
+    <p>Davis Wright Tremaine. "CISA Delays Cyber Incident Reporting Rules Until May 2026." September 2025.</p>
+  </div></section>
+
+  <section class="s"><div class="si">
+    <h2>Books &amp; Reports</h2>
+    <p>Schneier, Bruce. <em>Click Here to Kill Everybody.</em> W.W. Norton, 2018.</p>
+    <p>Cyberspace Solarium Commission. "Final Report." March 2020.</p>
+    <p>Institute for Security and Technology. Ransomware Task Force. "Combating Ransomware: A Comprehensive Framework for Action." April 2021.</p>
+    <p>Healey, Jason and Grotto, Andrew. "A Whole-of-Nation Approach to Cybersecurity." Council on Foreign Relations, 2023.</p>
+  </div></section>
 </div>
 
 <!-- FOOTER -->
 <footer class="foot"><div class="foot-i">
-  <p class="line">========================================</p>
-  <p>Pietro Ferraresi // PP255: Intro to Cyber Policy // Duke University // Spring 2026</p>
-  <p>Academic capstone project for Professor David Hoffman's course.</p>
-  <p style="margin-top:.5rem">Built with HTML, CSS, and JavaScript. No frameworks, no templates.</p>
+  <p>Pietro Ferraresi // COMPSCI 255 // 2026</p>
 </div></footer>
 
 <script>
 (function(){
-// Mobile nav
 var btn=document.querySelector('.hb'),nl=document.querySelector('.nl');
 if(btn&&nl)btn.addEventListener('click',function(){nl.classList.toggle('show')});
-
-// Page routing
 function go(id){
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('live')});
   var el=document.getElementById('p-'+id);if(el)el.classList.add('live');
   document.querySelectorAll('.nl a').forEach(function(a){a.classList.toggle('on',a.dataset.p===id)});
-  if(nl)nl.classList.remove('show');
-  window.scrollTo(0,0);fade();
+  if(nl)nl.classList.remove('show');window.scrollTo(0,0);fade();
 }
 document.querySelectorAll('[data-p]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();go(el.dataset.p)})});
 document.querySelectorAll('[data-go]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();go(el.dataset.go)})});
-
-// Tabs
 document.querySelectorAll('.tab').forEach(function(t){
   t.addEventListener('click',function(){
-    var parent=t.parentElement.parentElement;
-    parent.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
-    parent.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('on')});
+    var p=t.closest('.si');
+    p.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+    p.querySelectorAll('.tab-content').forEach(function(x){x.classList.remove('on')});
     t.classList.add('on');
-    var tc=document.getElementById('tc-'+t.dataset.tab);
-    if(tc)tc.classList.add('on');
+    var tc=document.getElementById('tc-'+t.dataset.tab);if(tc)tc.classList.add('on');
   });
 });
-
-// Scroll fade
 function fade(){
   var els=document.querySelectorAll('.pg.live .si, .pg.live .ph-i, .pg.live .st, .pg.live .tl-i, .pg.live .sc, .pg.live .card');
   if(!('IntersectionObserver' in window))return;
   var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}})},{threshold:.06,rootMargin:'0px 0px -20px 0px'});
   els.forEach(function(el){el.classList.remove('vis');el.classList.add('ft');obs.observe(el)});
-}
-fade();
+}fade();
 })();
 </script>
 </body>
