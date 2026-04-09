@@ -163,40 +163,10 @@ img{max-width:100%;display:block}
     <p>None of this happens by chance. Modern ransomware criminal enterprises are deliberate and precise in their choice of victim organizations. They pursue targets where the cost of downtime is high enough to warrant paying millions of dollars as ransom. Such criminal operations usually reside in other countries, namely Russia, where they can safely conduct their operations as long as they do not target entities within their own jurisdictions.</p>
     <p>According to the US government, there are sixteen critical infrastructure sectors which are crucial to the national security and the wellbeing of its citizens. Unfortunately, after two decades of cybersecurity policy initiatives, the framework for protecting such sectors is severely flawed. Protection responsibilities are scattered among many different agencies. Most requirements are purely voluntary. Where there are mandatory rules, there is little enforcement of them.</p>
 
-    <div class="diagram">
-      <svg viewBox="0 0 760 370" xmlns="http://www.w3.org/2000/svg" style="max-width:760px;width:100%">
-        <rect x="270" y="10" width="220" height="60" rx="3" fill="#9e2a0f0a" stroke="#9e2a0f" stroke-width="2"/>
-        <text x="380" y="36" fill="#9e2a0f" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">RAAS DEVELOPERS</text>
-        <text x="380" y="54" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="11" text-anchor="middle">Build the malware, run the platform, take 10-25%</text>
-        <line x1="320" y1="70" x2="130" y2="120" stroke="#d5d0c8" stroke-width="1.5"/>
-        <line x1="380" y1="70" x2="380" y2="120" stroke="#d5d0c8" stroke-width="1.5"/>
-        <line x1="440" y1="70" x2="630" y2="120" stroke="#d5d0c8" stroke-width="1.5"/>
-        <rect x="30" y="120" width="200" height="55" rx="3" fill="none" stroke="#3d3833" stroke-width="1.5"/>
-        <text x="130" y="145" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">AFFILIATE 1</text>
-        <text x="130" y="162" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Carries out attacks, keeps 75-90%</text>
-        <rect x="280" y="120" width="200" height="55" rx="3" fill="none" stroke="#3d3833" stroke-width="1.5"/>
-        <text x="380" y="145" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">AFFILIATE 2</text>
-        <text x="380" y="162" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Carries out attacks, keeps 75-90%</text>
-        <rect x="530" y="120" width="200" height="55" rx="3" fill="none" stroke="#3d3833" stroke-width="1.5"/>
-        <text x="630" y="145" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">AFFILIATE 3</text>
-        <text x="630" y="162" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Carries out attacks, keeps 75-90%</text>
-        <rect x="30" y="215" width="200" height="48" rx="3" fill="none" stroke="#1a7a6d" stroke-width="1.5" stroke-dasharray="5,4"/>
-        <text x="130" y="237" fill="#1a7a6d" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">ACCESS BROKERS</text>
-        <text x="130" y="253" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Sell stolen credentials</text>
-        <line x1="130" y1="215" x2="130" y2="175" stroke="#1a7a6d" stroke-width="1" stroke-dasharray="4,3"/>
-        <rect x="530" y="215" width="200" height="48" rx="3" fill="none" stroke="#2456a4" stroke-width="1.5" stroke-dasharray="5,4"/>
-        <text x="630" y="237" fill="#2456a4" font-family="Courier New,monospace" font-size="11" text-anchor="middle" font-weight="bold">CRYPTO LAUNDERING</text>
-        <text x="630" y="253" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="10" text-anchor="middle">Mixers, OTC brokers, exchanges</text>
-        <line x1="630" y1="215" x2="630" y2="175" stroke="#2456a4" stroke-width="1" stroke-dasharray="4,3"/>
-        <rect x="160" y="300" width="440" height="55" rx="3" fill="#2d7d460a" stroke="#2d7d46" stroke-width="2"/>
-        <text x="380" y="324" fill="#2d7d46" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">VICTIMS</text>
-        <text x="380" y="342" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="11" text-anchor="middle">Hospitals, pipelines, payment processors, utilities</text>
-        <line x1="130" y1="175" x2="270" y2="300" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="380" y1="175" x2="380" y2="300" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="630" y1="175" x2="490" y2="300" stroke="#d5d0c8" stroke-width="1"/>
-      </svg>
-      <div class="diagram-c">How ransomware-as-a-service works.</div>
-    </div>
+  <div style="margin:1.5rem 0">
+    <img src="raas-diagram.png" alt="RaaS ecosystem diagram" style="border:1px solid #d5d0c8">
+    <p style="font-family:var(--mono);font-size:.82rem;color:#6e6960;margin-top:.4rem">How ransomware-as-a-service works.</p>
+  </div>
 
     <p>This site looks at how we got here. Three case studies (<strong>WannaCry</strong>, <strong>Colonial Pipeline</strong>, and <strong>Change Healthcare</strong>) show the same failures playing out again and again across seven years. From there, it breaks down the current U.S. policy framework and its gaps, compares it to what the UK has built, and ends with six concrete recommendations for what should change.</p>
   </div></section>
@@ -386,34 +356,9 @@ img{max-width:100%;display:block}
     <div class="tag green">Framework</div>
     <h2>NIST CSF 2.0</h2>
     <p>Updated in February 2024, the framework organizes cybersecurity into six functions. Version 2.0 added Govern at the center to emphasize that leadership and risk management are foundational.</p>
-    <div class="diagram">
-      <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" style="max-width:560px;width:100%">
-        <circle cx="280" cy="125" r="45" fill="#2d7d460a" stroke="#2d7d46" stroke-width="2"/>
-        <text x="280" y="121" fill="#2d7d46" font-family="Courier New,monospace" font-size="14" text-anchor="middle" font-weight="bold">GOVERN</text>
-        <text x="280" y="137" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">(new in 2.0)</text>
-        <circle cx="280" cy="125" r="100" fill="none" stroke="#d5d0c8" stroke-width="1.5" stroke-dasharray="6,5"/>
-        <rect x="228" y="2" width="104" height="36" rx="3" fill="#fff" stroke="#1a1714" stroke-width="1.5"/>
-        <text x="280" y="18" fill="#1a1714" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">IDENTIFY</text>
-        <text x="280" y="32" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Assets, risk</text>
-        <rect x="430" y="58" width="115" height="36" rx="3" fill="#fff" stroke="#2456a4" stroke-width="1.5"/>
-        <text x="487" y="74" fill="#2456a4" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">PROTECT</text>
-        <text x="487" y="88" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Access, training</text>
-        <rect x="440" y="155" width="115" height="36" rx="3" fill="#fff" stroke="#1a7a6d" stroke-width="1.5"/>
-        <text x="497" y="171" fill="#1a7a6d" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">DETECT</text>
-        <text x="497" y="185" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Monitoring</text>
-        <rect x="228" y="212" width="104" height="36" rx="3" fill="#fff" stroke="#a67c00" stroke-width="1.5"/>
-        <text x="280" y="228" fill="#a67c00" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">RESPOND</text>
-        <text x="280" y="242" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">IR, comms</text>
-        <rect x="15" y="155" width="115" height="36" rx="3" fill="#fff" stroke="#9e2a0f" stroke-width="1.5"/>
-        <text x="72" y="171" fill="#9e2a0f" font-family="Courier New,monospace" font-size="12" text-anchor="middle" font-weight="bold">RECOVER</text>
-        <text x="72" y="185" fill="#6e6960" font-family="DM Sans,sans-serif" font-size="9" text-anchor="middle">Restoration</text>
-        <line x1="280" y1="38" x2="280" y2="80" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="430" y1="76" x2="325" y2="105" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="440" y1="173" x2="325" y2="148" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="280" y1="212" x2="280" y2="170" stroke="#d5d0c8" stroke-width="1"/>
-        <line x1="130" y1="173" x2="235" y2="148" stroke="#d5d0c8" stroke-width="1"/>
-      </svg>
-      <div class="diagram-c">NIST CSF 2.0 core functions.</div>
+    <div style="margin:1.5rem 0">
+      <img src="nist-csf.png" alt="NIST Cybersecurity Framework 2.0" style="border:1px solid #d5d0c8">
+      <p style="font-family:var(--mono);font-size:.82rem;color:#6e6960;margin-top:.4rem">NIST Cybersecurity Framework 2.0 core functions. Source: NIST.gov</p>
     </div>
     <p>The framework is well-built and widely used. In the case of critical infrastructure, though, the very qualities that make it useful cause it to fail: the organization can claim that it works within the guidelines of the NIST CSF but at the same time runs unpatched systems, fails to implement multi-factor authentication for remote login, and never tests the backups it has in place.</p>
   </div></section>
