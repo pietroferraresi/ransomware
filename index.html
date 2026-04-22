@@ -171,7 +171,6 @@ img{max-width:100%;display:block}
  <h2>The Problem</h2>
  <p>In the early 2010s, ransomware looked pretty tame. It encrypted your personal files, demanded a few hundred dollars in Bitcoin, and you either paid or restored from a backup. The damage was real but contained. By 2024, that model is unrecognizable. Today's ransomware operations run like legitimate software companies. They have affiliate programs with revenue-share agreements, around-the-clock customer support for victims trying to negotiate, professional media relations teams, and internal dispute resolution processes. ALPHV/BlackCat, the group behind the Change Healthcare attack, even had an internal arbitration board to handle disputes between affiliates and the core operators.</p>
  <p>The shift that made all of this profitable was the decision to stop going after individuals and start going after organizations that literally cannot afford to be offline. A hospital running at 105% capacity during flu season cannot negotiate for three weeks while IT rebuilds the network. A pipeline moving 2.5 million barrels a day of gasoline, diesel, and jet fuel from Houston to New Jersey cannot verify whether its operational technology has been touched without bringing the whole system down. A payment processor that sits between one in every three American patients and their insurance company cannot just pause billing for a month. These are the targets, and the attackers know exactly what an hour of downtime costs each of them.</p>
- <p>The groups doing this are, for the most part, based in Russia or other former Soviet states. Many of the most sophisticated operators have an unwritten rule built directly into their malware: it will not execute on systems with Russian-language keyboard layouts or on computers located inside the Commonwealth of Independent States. This is not an accident. It is a calculated arrangement with their host governments: do not hit us, and we will not come after you. The result is that law enforcement in the U.S. can seize infrastructure and indict individuals, but they usually cannot actually arrest anyone, because the people they would arrest live in Moscow and St. Petersburg with no extradition treaty.</p>
 
  <div style="margin:1.5rem 0">
  <img src="raas-diagram.png" alt="RaaS ecosystem diagram" style="border:1px solid #d5d0c8">
@@ -184,16 +183,6 @@ img{max-width:100%;display:block}
  </div></section>
 
  <div class="band"><p>Why does the U.S. keep getting hit by ransomware attacks on critical infrastructure, and what actually needs to change?</p></div>
-
- <section class="s"><div class="si">
- <div class="tag teal">Background</div>
- <h2>What Actually Counts as a "Ransomware Attack"?</h2>
- <p>This sounds obvious but it turns out to be one of the hardest definitional questions in the whole framework, and it directly affects what has to be reported and when. Different agencies and documents define it differently, and that inconsistency is a real problem.</p>
- <p>The current working definition in the <em class="ref">CIRCIA</em> proposed rule covers a "ransomware attack" as an incident that involves "the use or threatened use of unauthorized or malicious code" against an information system with the goal of "interrupting or disrupting the operations of such information system or compromising the confidentiality, availability, or integrity of electronic data stored on, processed by, or transiting such information system" in order to extort a demand for payment. That definition is broad on purpose. It covers classic encryption attacks but also pure data exfiltration extortion (where no encryption happens), denial-of-service extortion, and hybrid attacks.</p>
- <p>But "ransomware attack" and "reportable incident" are not the same thing. Under the <em class="ref">CIRCIA</em> NPRM, only a "substantial cyber incident" triggers the 72-hour incident reporting requirement, and that is defined as an incident that produces a "substantial loss of confidentiality, integrity, or availability," a "serious impact on the safety and resiliency of operational systems and processes," disruption of the entity's ability to deliver goods or services, or unauthorized access caused by a supply chain compromise. A ransom payment, however, must be reported within 24 hours regardless of whether the underlying incident is "substantial". So if a hospital pays ransom on an attack that only encrypted a small portion of its network, the payment is reportable even if the attack itself is not.</p>
- <p>Different sectors use different definitions altogether. HIPAA's Security Rule, which governs healthcare, does not use the word "ransomware" in its current operative text. Instead, HHS treats a ransomware incident as a "security incident" under the <em class="ref">HIPAA Security Rule</em>, which defines a security incident as "the attempted or successful unauthorized access, use, disclosure, modification, or destruction of information or interference with system operations in an information system." The effect: whether a healthcare ransomware attack counts as a reportable breach depends on whether the provider can prove that protected health information was not accessed or exfiltrated, which is almost impossible to prove with certainty. TSA's Pipeline Security Directives use yet another definition: a "cybersecurity incident" is any event that "jeopardizes the cybersecurity of an Information or Operational Technology system", with a 12-hour reporting deadline to CISA rather than 72.</p>
- <p>Why this matters for policy: when every agency uses a slightly different definition, a company that operates across sectors (which is most large companies) has to figure out multiple overlapping reporting obligations with different timelines and thresholds. It also means the government does not have a consistent dataset across sectors, which makes trend analysis almost impossible.</p>
- </div></section>
 
  <section class="s"><div class="si">
  <div class="tag green">The 16 Sectors</div>
@@ -230,13 +219,6 @@ img{max-width:100%;display:block}
  <h3>Old Systems, New Connections</h3>
  <p>A large portion of critical infrastructure runs on technology that predates the modern internet. Industrial control systems (ICS), SCADA (supervisory control and data acquisition) platforms, and medical devices were engineered for reliability and safety, not confidentiality or authentication. Many of them do not support encryption, cannot handle modern authentication protocols, and receive patches irregularly if at all. Over the last twenty years, these systems have been connected to corporate IT networks for monitoring and efficiency, which means an attacker who compromises an HR email account can sometimes pivot into the network segment that controls pumps and valves. This is the IT/OT convergence problem and it is what made Colonial's shutdown so severe: DarkSide never directly touched operational technology, but Colonial could not confirm OT was clean and could not run billing either, so they shut everything down as a precaution.</p>
  </div></div>
- <div class="cols"><div>
- <h3>Safe Havens</h3>
- <p>Most of the ransomware groups responsible for critical infrastructure attacks operate from Russia, Belarus, and a handful of other jurisdictions. Russia has no extradition treaty with the U.S. and has consistently declined to act against groups based on its territory as long as they avoid domestic targets. Many ransomware variants include code that checks the victim's keyboard language and geolocation and exits without executing if the target is inside the CIS. The RaaS model further fragments accountability. Developers, affiliates, initial access brokers, and cryptocurrency launderers are often in different countries, use different pseudonyms, and never meet. U.S. prosecutors have indicted and sanctioned dozens of ransomware operators, including multiple members of DarkSide and ALPHV/BlackCat, but indictments without extradition are symbolic.</p>
- </div><div>
- <h3>Nobody Knows the Full Picture</h3>
- <p>Until <em class="ref">CIRCIA</em> is operational, there is no comprehensive national dataset on ransomware incidents. Victims have strong incentives to hide breaches: stock price impact, shareholder lawsuits, regulatory scrutiny, reputational damage, and loss of customer trust. Sector-specific reporting obligations exist in healthcare (HIPAA breach notification), finance (SEC 8-K cyber disclosure rules from 2023), and for federal contractors, but coverage is uneven and the data sits in different places. The Sophos "State of Ransomware 2024" survey found that 59% of organizations were hit by ransomware in the preceding year and 56% paid a ransom, but these are self-reported industry surveys, not government data. Without systematic visibility, Congress cannot write targeted legislation and CISA cannot identify which sectors and techniques need the most urgent intervention.</p>
- </div></div>
  </div></section>
 
  <section class="s"><div class="si">
@@ -256,6 +238,87 @@ img{max-width:100%;display:block}
  <div class="ph"><div class="ph-i"><div class="tag">Case Studies</div><h1>Three Incidents, One Pattern</h1><p class="desc">Each attack exploited a vulnerability that was known and fixable. Each one prompted policy responses that came too late for the next victim. Looking at them in sequence shows how the same categories of failure kept reappearing.</p></div></div>
 
  <section class="s"><div class="si w">
+ <div class="diagram">
+ <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ransomware attack kill chain common to all three case studies">
+  <defs>
+   <marker id="arr1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#6e6960"/>
+   </marker>
+  </defs>
+  <text x="450" y="22" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="14" fill="#1a1714">The Attack Pattern: How All Three Incidents Unfolded</text>
+
+  <g>
+   <rect x="20" y="55" width="150" height="90" fill="#fff" stroke="#9e2a0f" stroke-width="2" rx="3"/>
+   <text x="95" y="78" text-anchor="middle" font-family="Courier New, monospace" font-size="10" font-weight="700" fill="#9e2a0f">STAGE 1</text>
+   <text x="95" y="100" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="13" fill="#1a1714">Initial Access</text>
+   <text x="95" y="120" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">Stolen credential</text>
+   <text x="95" y="134" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">or unpatched vuln</text>
+  </g>
+  <path d="M 175 100 L 195 100" stroke="#6e6960" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+  <g>
+   <rect x="200" y="55" width="150" height="90" fill="#fff" stroke="#2456a4" stroke-width="2" rx="3"/>
+   <text x="275" y="78" text-anchor="middle" font-family="Courier New, monospace" font-size="10" font-weight="700" fill="#2456a4">STAGE 2</text>
+   <text x="275" y="100" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="13" fill="#1a1714">Lateral Movement</text>
+   <text x="275" y="120" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">Escalate privileges,</text>
+   <text x="275" y="134" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">spread on network</text>
+  </g>
+  <path d="M 355 100 L 375 100" stroke="#6e6960" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+  <g>
+   <rect x="380" y="55" width="150" height="90" fill="#fff" stroke="#1a7a6d" stroke-width="2" rx="3"/>
+   <text x="455" y="78" text-anchor="middle" font-family="Courier New, monospace" font-size="10" font-weight="700" fill="#1a7a6d">STAGE 3</text>
+   <text x="455" y="100" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="13" fill="#1a1714">Exfiltration</text>
+   <text x="455" y="120" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">Steal data for</text>
+   <text x="455" y="134" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">double extortion</text>
+  </g>
+  <path d="M 535 100 L 555 100" stroke="#6e6960" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+  <g>
+   <rect x="560" y="55" width="150" height="90" fill="#fff" stroke="#a67c00" stroke-width="2" rx="3"/>
+   <text x="635" y="78" text-anchor="middle" font-family="Courier New, monospace" font-size="10" font-weight="700" fill="#a67c00">STAGE 4</text>
+   <text x="635" y="100" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="13" fill="#1a1714">Encryption</text>
+   <text x="635" y="120" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">Lock core systems,</text>
+   <text x="635" y="134" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">halt operations</text>
+  </g>
+  <path d="M 715 100 L 735 100" stroke="#6e6960" stroke-width="1.5" marker-end="url(#arr1)"/>
+
+  <g>
+   <rect x="740" y="55" width="150" height="90" fill="#fff" stroke="#2d7d46" stroke-width="2" rx="3"/>
+   <text x="815" y="78" text-anchor="middle" font-family="Courier New, monospace" font-size="10" font-weight="700" fill="#2d7d46">STAGE 5</text>
+   <text x="815" y="100" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="13" fill="#1a1714">Extortion</text>
+   <text x="815" y="120" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">Ransom demand</text>
+   <text x="815" y="134" text-anchor="middle" font-family="Source Serif 4, serif" font-size="11" fill="#3d3833">in cryptocurrency</text>
+  </g>
+
+  <line x1="20" y1="170" x2="890" y2="170" stroke="#d5d0c8" stroke-width="1"/>
+
+  <text x="12" y="192" font-family="Courier New, monospace" font-size="9" font-weight="700" fill="#9e2a0f">WANNACRY</text>
+  <text x="95" y="192" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">EternalBlue SMB</text>
+  <text x="275" y="192" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">Worm self-spreads</text>
+  <text x="455" y="192" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">—</text>
+  <text x="635" y="192" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">230k machines</text>
+  <text x="815" y="192" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">~$300 per victim</text>
+
+  <text x="12" y="215" font-family="Courier New, monospace" font-size="9" font-weight="700" fill="#2456a4">COLONIAL</text>
+  <text x="95" y="215" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">VPN, no MFA</text>
+  <text x="275" y="215" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">~24 hrs inside</text>
+  <text x="455" y="215" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">100 GB stolen</text>
+  <text x="635" y="215" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">Billing locked</text>
+  <text x="815" y="215" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">$4.4M paid</text>
+
+  <text x="12" y="238" font-family="Courier New, monospace" font-size="9" font-weight="700" fill="#1a7a6d">CHG HEALTH</text>
+  <text x="95" y="238" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">Citrix, no MFA</text>
+  <text x="275" y="238" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">9 days inside</text>
+  <text x="455" y="238" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">190M+ records</text>
+  <text x="635" y="238" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">Core systems locked</text>
+  <text x="815" y="238" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#3d3833">$22M paid</text>
+ </svg>
+ <p class="diagram-c">The common attack pattern across all three case studies. Each stage represents a point where a defensive control (MFA, patching, segmentation, monitoring) could have broken the chain.</p>
+ </div>
+ </div></section>
+
+ <section class="s"><div class="si w">
  <div class="tabs">
  <button class="tab on" data-tab="wc">WannaCry</button>
  <button class="tab" data-tab="cp">Colonial Pipeline</button>
@@ -273,14 +336,10 @@ img{max-width:100%;display:block}
 
  <h3>What Happened</h3>
  <p>The self-replicating WannaCry ransomware attack was carried out by exploiting a vulnerability in Microsoft's Server Message Block protocol (SMBv1), which is commonly known as EternalBlue. This vulnerability was discovered by the NSA's Tailored Access Operations Unit, likely in 2013. Following their discovery of the vulnerability, the NSA classified it as an offensive capability and chose not to disclose the vulnerability to Microsoft in order to patch it but rather decided to retain it for future use in intelligence operations. This decision by the NSA lies at the heart of why WannaCry happened.</p>
- <p>The Shadow Brokers hacking group first announced the existence of NSA hacking tools in a blog post in August 2016. They released the EternalBlue exploit publicly in April 2017. Microsoft had silently fixed the vulnerability in question in its March 14, 2017 security update <em class="ref">MS17-010</em>, likely upon notification from the NSA, now that it was certain that the vulnerability would be disclosed. However, patches do not instantly propagate themselves – millions of machines remained unpatched, many of which were running end-of-life Windows XP operating systems that would not receive the March patch, requiring an emergency out-of-band patch in April.</p>
  <p>On May 12, 2017, WannaCry began spreading. The worm infected systems in over 150 countries within hours of becoming operational due to its technical design, which required no user interaction. Traditional ransomware spreads when a user interacts with something and clicks something, whereas WannaCry utilized the EternalBlue worm to move laterally and replicate across entire networks. All it took was one machine to become infected, and all others on the network were soon after compromised without users being involved in any way. The spread continued for seven hours until an incident occurred which stopped WannaCry in its tracks. Marcus Hutchins, a 22-year-old British cybersecurity researcher, noticed that the malware would check for the existence of a specific domain prior to execution. For $10, Hutchins registered the domain, which became a kill-switch that stopped infections dead in their tracks.</p>
 
  <h3>The Damage in the UK</h3>
  <p>Perhaps the greatest organizational effect was experienced by the United Kingdom's National Health Service. According to the National Audit Office's report of WannaCry (October 2017), at least 80 out of 236 NHS trust providers in England were affected, as well as 603 primary care and other NHS organizations, including 595 GP surgeries. Some 19,000 appointments, including urgent cancer referrals, were canceled as a result. Five emergency departments had to reroute ambulances to other hospitals since they were unable to take any additional patients. The tone used in the NAO report was clear and unambiguous, with the statement that "the NHS had been warned of the risk of a cyber-attack on the NHS a year before WannaCry and although it had work ongoing, it did not formally respond to the warning until July 2017." The Department of Health and NHS England did not ensure that NHS organizations patched their systems and responded to CareCERT alerts. This attack could have been completely prevented, and its occurrence in such a situation was what made it so damning for the voluntary guidance method.</p>
-
- <h3>The Damage in the US and Beyond</h3>
- <p>While the U.S. effect was more limited, there were still major disruptions in some parts of the country. In Pennsylvania, the Heritage Valley Health System noted major problems with their radiology, laboratory, and pharmacy computer networks. Even worse off was the FedEx-owned TNT Express subsidiary. However, the larger effect was the reason why the malware attacked the United States. Essentially, the attack came from something created by the NSA, which decided to keep the tool for itself. Now that it had leaked out and became a global threat, the government had to deal with the aftermath of something it helped create. The former Homeland Security Advisor Tom Bossert officially attributed the attack to the Lazarus Group within North Korea in December of 2017. Of course, attribution is not a deterrent in cases where extradition cannot be achieved.</p>
 
  <div class="quote">The cyber-attack could have caused more disruption if it had not been stopped by a cyber researcher activating a 'kill switch' so that WannaCry stopped locking devices... The Department has no formal mechanism for assessing whether NHS organisations have complied with its advice and guidance.
  <span class="src">&mdash; UK National Audit Office, "Investigation: WannaCry Cyber Attack and the NHS," October 2017</span>
@@ -288,7 +347,6 @@ img{max-width:100%;display:block}
 
  <h3>What It Showed</h3>
  <p>The three things that would still exist seven years later in the Change Healthcare case. Firstly, the <em class="ref">Vulnerabilities Equities Process</em>, which should provide guidance on whether the vulnerability will be disclosed by the U.S. government or used for offensive purposes, was running without any statute, without oversight, and without transparency. The official charter on the topic was published only in November 2017 – more than half a year after the incident. Moreover, it is only an internal executive branch policy document but not a legal act, which means it may easily be changed or overlooked.</p>
- <p>Secondly, there were no effective practices in terms of managing the vulnerabilities of critical infrastructure systems. If the NHS applied the patch, which existed since two months before the attack, the losses would decrease drastically. However, there was no system in place to force trust in hospitals to install patches, no audit of compliance with Cyber Essentials standards, and no effective enforcement measure. In Change Healthcare seven years later, there was HIPAA, which did not have specific requirements regarding such security measures as MFA or timely software updates.</p>
  <p>Thirdly, there was no coordination mechanism to address cross-border cyber attacks. The worm affected 150 countries within several hours. The United States officially attributed the attack to North Korea seven months later. At this moment, however, the discussion on the issue was already over and any potential deterrent response failed.</p></div>
 
  <div class="tab-content" id="tc-cp">
@@ -302,7 +360,6 @@ img{max-width:100%;display:block}
 
  <h3>What Happened</h3>
  <p>The Colonial Pipeline runs from Texas Gulf Coast to the New York Metropolitan area, carrying refined petroleum products (gasoline, jet fuel, diesel fuel, heating fuel) from various refineries. This pipeline has an annual throughput capacity of about 2.5 million barrels per day and serves the East Coast of the US with 45% of its refined fuel needs. On May 6, 2021, the ransomware group named DarkSide (a Russian-language affiliate program) gained access to Colonial Pipeline's information systems via one vulnerable employee's VPN account that had been abandoned previously, did not feature multi-factor authentication, and used credentials that had already been exposed in the past data breach.</p>
- <p>DarkSide remained active inside Colonial Pipeline's networks for about one day during which the group exfiltrated 100GB of data, then used their access privileges to deploy ransomware that locked Colonial's billing, accounting, and client management systems. Significantly, OT (operational technology that controls pipeline's flow) remained untouched by DarkSide's activities, but Colonial Pipeline could not ascertain that OT was uncompromised and even assuming it had stayed unbreached, still required its billing system to run because it needed to identify to whom each batch of fuel belonged. Hence, Colonial decided to shut down operations of the pipeline entirely.</p>
  <p>Colonial Pipeline paid $4.4 million of the requested ransom in Bitcoins very soon after being targeted. In fact, the decryption tool provided by DarkSide was extremely inefficient, thus Colonial Pipeline had to restore systems from its backups. By May 12, Colonial Pipeline resumed its activities, though at a reduced capacity until returning to normal operations within a few days. On June 7, 2021, the FBI confirmed recovery of 63.7 Bitcoins worth about $2.3 million from one of the wallets associated with DarkSide. In fact, DarkSide ceased operations on May 14 under pressure from law enforcement and rebranded into BlackMatter within a couple of months, while some of them were eventually detected again operating as ALPHV/BlackCat (targeting Change Healthcare).</p>
 
  <h3>The Damage</h3>
@@ -310,14 +367,11 @@ img{max-width:100%;display:block}
 
  <h3>What It Showed</h3>
  <p>The Colonial incident marked the point at which ransomware entered the realm of National Security Council priorities. As a consequence of the ransomware attack, President Biden signed executive order 14028 "Improving the Nation's Cybersecurity" (May 12, 2021), which included the following: a zero-trust architecture requirement for all federal government agencies; software supply chain security requirements, including the mandate for Software Bill of Materials to be supplied for all contracts with federal agencies; and creation of the Cyber Safety Review Board. In addition, two weeks after the shutdown, TSA issued its first-ever directive for the pipeline industry – Security Directive Pipeline-2021-01 – on May 28. Previously, the industry guidance had existed only in the form of voluntary TSA Pipeline Security Guidelines (2018).</p>
- <p>Security Directive Pipeline-2021-01 outlined three actions that needed to be taken by designated critical pipeline operators: appointment of a Cybersecurity Coordinator who is reachable around the clock; reporting of any cybersecurity incidents to TSA and CISA within 12 hours; and completion of the pipeline operator vulnerability assessment, along with identification of vulnerabilities and the development of an action plan within 30 days. Two months after Security Directive Pipeline-2021-01, TSA issued its next Security Directive Pipeline-2021-02 on July 19, 2021, in which operators were asked to take the following steps: mitigate risks in relation to disruption caused by ransomware or similar cyberattacks; create a cybersecurity contingency and recovery plan; and review the cybersecurity architecture design. After going through five drafts (-02A through -02E), the directive changed from prescriptive to performance-based. Nevertheless, this marked progress, although not possible without Colonial's shutdown.</p>
  <p>Prior to 2021, TSA had not issued a single cybersecurity-related rule for the pipeline industry since its creation in 2001. Also, TSA had not conducted any cybersecurity-related audit of Colonial during the three years leading up to the cyberattack. One unsecured user account should not have caused almost 45% of the East Coast's fuel supplies to be shut down, yet it did.</p>
 
  <div class="quote">We had no idea, at any of our facilities, that we had a vulnerability... In hindsight, we should have had multifactor authentication on [the VPN account], and we didn't.
  <span class="src">&mdash; Joseph Blount, CEO of Colonial Pipeline, testimony to U.S. Senate Committee on Homeland Security and Governmental Affairs, June 8, 2021</span>
  </div>
-
- <p>This brings up the more fundamental issue of IT/OT convergence. The OT systems at Colonial were untouched during the attack. The attack took place on the billing network. However, due to the dependency between the two networks on the level of business processes, an attack on one of them meant an attack on both of them. This is the reality that exists in most infrastructures: An attack does not need to directly impact physical control systems in order to have physical consequences, as long as upstream business systems can be targeted.</p>
  </div>
 
  <div class="tab-content" id="tc-ch">
@@ -333,12 +387,9 @@ img{max-width:100%;display:block}
  <p>Change Healthcare is a subsidiary company under the Optum umbrella of UnitedHealth Group. It handles over 15 billion health care transactions per year, which include claims management, eligibility verification, prior authorizations, and prescription writing. As per estimates by the parent company, one in every three patient records in the United States passes through their systems at some point. UHG bought Change Healthcare for $13 billion in 2022.</p>
  <p>An affiliate of the ALPHV/BlackCat ransomware gang gained access to a Change Healthcare Citrix remote access portal in February 2024. In an appearance before the Senate Finance Committee, on May 1, 2024, the CEO of UnitedHealth Group, Mr. Andrew Witty, stated that the portal lacked MFA. This was confirmed in his written statement and testified again during his appearance at the House Energy and Commerce Committee. Three years after the incident involving Colonial Pipeline, in one of the largest healthcare organizations in the United States, a similar failure led to a massive breach.</p>
  <p>The hackers spent approximately nine days on the network between February 12 and February 21. They exfiltrated massive amounts of data during this period. They then launched ransomware against the company's core processing systems. Change Healthcare then disconnected all its services, which led to massive downstream effects. Patients could not verify their insurance coverage, submit claims online, or receive their medications unless they paid upfront in cash. Hospitals, dental practices, and physician groups could not file their claims and began to run out of operating capital in less than a month.</p>
- <p>On March 3, 2024, UnitedHealth Group paid $22 million in Bitcoin to ALPHV. Here the narrative begins to get bizarre. ALPHV's management stole the money and went into hiding. To cover their tracks, they posted a fake FBI takedown notice on their website. They failed to pay the affiliate their portion of the ransom. Furious, the affiliate posted their claim, stating that while they had indeed paid the ransom, they had yet to receive their portion. They subsequently handed over the data stolen from Change Healthcare to another ransomware group called RansomHub, which then issued a ransom demand to publish the information unless they were paid a second time.</p>
  
  <h3>The Damage</h3>
  <p>The short-term impact on healthcare delivery was quite serious. In response to the incident, the American Hospital Association surveyed their members and discovered that 94% had experienced financial consequences, 74% reported disruptions to direct patient care, and more than half were experiencing payroll difficulties. Small healthcare providers, rural hospitals, and community health centers bore the brunt of the damage since they lacked the funds to survive without revenue for weeks. Consequently, HHS established an advance payment program for affected healthcare organizations.</p>
- <p>The breach itself is the largest in U.S. healthcare history. According to UHG's disclosure to the HHS Office for Civil Rights in October 2024, some 100 million individuals were affected. This number was subsequently raised. As per January 2025 filings, UHG estimated that roughly 190 million Americans had been affected, almost half the country's population. The leaked information included names, addresses, dates of birth, Social Security numbers, insurance information, diagnoses, test results, treatment records, and billing information.
-</p>
  <p>UnitedHealth Group's direct costs resulting from the breach through fiscal year-end 2024 amounted to $3.09 billion. The estimate was taken from UnitedHealth Group's own Q1-Q4 2024 quarterly earnings reports. These costs cover information technology restoration efforts, business disruption expenses, and notification of customers. They do not account for litigation costs, including multiple class-action suits filed by patients, healthcare providers, and business partners.</p>
 
  <div class="quote">I am deeply, deeply sorry to those individuals whose data has been compromised... Change Healthcare was in the process of upgrading the server that was compromised, and the fact that we had not yet deployed multi-factor authentication was an oversight for which there is no excuse.
@@ -349,8 +400,6 @@ img{max-width:100%;display:block}
  <p>The first thing that became clear about the Change Healthcare attack is the issue of concentration risk within the U.S. healthcare payment systems. No single firm should have the ability to bring down one-third of the country's healthcare billing due to its failure to properly protect a remote access portal with multi-factor authentication. However, due to decades of industry consolidation, Change Healthcare now finds itself at a critical junction – one which has an impact on nearly all Americans' experiences with the healthcare system in one way or another. Yet unlike in other industries where there are designations such as the <em class="ref">SIFI</em> framework, there is currently no such thing as a "systemically important" healthcare firm.
 </p>
  <p>Second, the problem is that the <em class="ref">HIPAA Security Rule</em> itself is outdated. The most recent version of the rule's operative language was amended back in 2013. In that document, there is no requirement for multi-factor authentication, no requirement for any kind of encryption standard to be applied, no requirement for an inventory of assets, and no requirement for any sort of network segmentation. The only requirement regarding authentication is for covered entities to simply "implement procedures to verify that a person or entity seeking access to electronic protected health information is the one claimed."</p>
- <p>This is changing, but very slowly. On December 27, 2024 (federalregister.gov/entry/2025-00031), HHS's Office for Civil Rights issued its Notice of Proposed Rulemaking, which would dramatically modernize the <em class="ref">HIPAA Security Rule</em> for the first time since over two decades ago. This proposal explicitly mandates MFA, explicitly mandates encryption of all PHI stored or transmitted electronically, explicitly mandates asset inventories and network diagrams, and completely removes the "addressable" option from all standards. Everything else in the HIPAA Security Rule becomes mandatory under the proposed changes. However, the rule is still just in the notice-and-comment phase in early 2026, meaning that after finalization, it could take up to 180 days to 12 months to become fully operational. Change Healthcare happened because there was no rule in place. And there could be another Change Healthcare by the time the rule gets passed and goes into effect.</p>
- <p>Finally, RaaS business models have inherent vulnerabilities that law enforcement has not yet exploited successfully but could in the future. The notorious ALPHV gang conducted an exit scam on itself by keeping the ransom proceeds while stiffing their affiliates of the same, which is quite telling about the fragility of such schemes. As a reminder, the term affiliate refers to contractors who cooperate simultaneously with more than one RaaS operator. In order to do so, they have to trust the operator. Law enforcement agencies are capable of impersonating RaaS operators, conducting influence campaigns against affiliates to undermine operators' reputation, thus making affiliation less appealing for affiliates. The FBI's January 2023 successful operation to disrupt Hive RaaS through secretly working inside its infrastructure and issuing decryptors to victims is the template. However, this is an isolated incident.</p>
  </div>
  </div></section>
 
@@ -406,20 +455,66 @@ img{max-width:100%;display:block}
  <div class="tag green">CIRCIA Up Close</div>
  <h2>What CIRCIA Actually Requires</h2>
  <p>Because <em class="ref">CIRCIA</em> is the single most important piece of ransomware-relevant federal legislation in the last decade, it is worth walking through what it actually says versus what it will require once operational.</p>
- <h3>Statutory text and reporting triggers</h3>
- <p>Section 681b of <em class="ref">CIRCIA</em> provides for. It imposes two separate notification requirements. Firstly, a “covered entity” that suffers a “covered cyber incident” shall notify CISA not later than 72 hours after determining, to a reasonable degree of certainty, that the incident has occurred. Secondly, a covered entity that pays ransom money, or that instructs another entity to pay ransom money on its behalf, due to ransomware, shall notify CISA not later than 24 hours after making such payments. These two requirements are separate from each other. In addition, a ransom payment is required to be notified even when the underlying incident does not amount to a “covered cyber incident.”</p>
  <h3>Who is covered?</h3>
  <p>"A covered entity" under the law means an entity within one of the 16 critical infrastructure sectors defined as such under CISA rules. The making of those rules is the essence of the battle. CISA's April 2024 NPRM sets forth a dual test whereby a covered entity is any entity in one of the critical infrastructure sectors, which either (1) surpasses SBA size thresholds based on its NAICS industry code classification, or (2) irrespective of size, qualifies under various criteria specific to each individual sector (chemical facilities with over a certain threshold amount of material present, defense industrial base companies, entities that own or operate bulk-power electric systems, and more). CISA estimates that about 316,000 entities will be covered under the new rulemaking.</p>
- <h3>What counts as a "substantial cyber incident"?</h3>
- <p>The NPRM defines a substantial cyber incident as an event that results in either of the following: substantial loss of confidentiality, integrity, or availability of information systems or data, significant effects on the safety or resiliency of operational systems or processes, interference with the delivery of goods and services by the entity, or any unauthorized access due to a compromise of the supply chain (compromised vendor, MSP, or cloud provider with access to the entity’s systems). CISA has included some examples of such incidents, including the following: ransomware attacks that encrypt core business systems, DDoS attacks that disrupt services for a prolonged time, compromised credentials through an MSP, and a security exploit that causes prolonged downtime.</p>
- <h3>Reporting content</h3>
- <p>The report must contain identifying details regarding the organization; a description of the occurrence/incident, including the consequences that arose; the Tactics, Techniques, and Procedures (TTPs) employed by the threat actor; Indicators of Compromise (IOCs); the identity of the threat actor where it is known; and where the report concerns a ransom payment, details of the payment made such as how much was paid and the cryptocurrency addresses used to make payment.</p>
- <h3>Enforcement</h3>
- <p>This is where <em class="ref">CIRCIA</em> begins to have teeth. If CISA becomes aware of a covered incident from a press release, referral from law enforcement, or another method, but the organization has failed to submit a report, a Request for Information may be issued that must be responded to within 72 hours. Should there be no response, or an insufficient response, a subpoena may be issued. Noncompliance with a subpoena will be referred to DOJ for civil action, to the DHS Suspension & Debarment office regarding federal contracting issues, and false/fraudulent information provided on a CIRCIA report renders the individual criminally liable ((five years maximum, eight years if related to terrorism)).</p>
- <h3>Protections for entities that report</h3>
- <p>The legislation has provisions for protection to ensure honest reporting by the entities. It states that reports will not be admissible as evidence in civil and criminal suits against the reporting entity, is not subject to FOIA, and enjoys liability protections for reporting. Further, the reports are to be treated as confidential and proprietary to the entity and should be considered commercial and financial information. This ensures that companies do not report their own mistakes and shortcomings to government agencies.</p>
  <h3>Why the delay matters</h3>
- <p>The <em class="ref">CIRCIA</em> law was signed in March 2022 due to Colonial Pipeline, SolarWinds, and the need for federal visibility into cyber events. The law allocated 24 months for the NPRM to be published by CISA, followed by 18 months from the publication of the NPRM until the rule is issued. CISA complied with the NPRM deadline in April 2024 but moved the deadline for issuance of the final rule from October 2025 to May 2026. Even this timeline faced the possibility of being breached due to the lapse in the budget of DHS, which made the February 2026 town halls impossible to conduct. Each month’s delay in the process means another month of blindness regarding ransomware reports. The Change Healthcare attack occurred two years after the start of the CIRCIA schedule.</p>
+ <p>The <em class="ref">CIRCIA</em> law was signed in March 2022 due to Colonial Pipeline, SolarWinds, and the need for federal visibility into cyber events. The law allocated 24 months for the NPRM to be published by CISA, followed by 18 months from the publication of the NPRM until the rule is issued. CISA complied with the NPRM deadline in April 2024 but moved the deadline for issuance of the final rule from October 2025 to May 2026. Even this timeline faced the possibility of being breached due to the lapse in the budget of DHS, which made the February 2026 town halls impossible to conduct. Each month's delay in the process means another month of blindness regarding ransomware reports. The Change Healthcare attack occurred two years after the start of the CIRCIA schedule.</p>
+
+ <div class="diagram">
+ <svg viewBox="0 0 900 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CIRCIA implementation timeline showing delays from 2022 to 2026">
+  <text x="450" y="22" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="14" fill="#1a1714">CIRCIA: Four Years From Signing to (Delayed) Final Rule</text>
+
+  <line x1="50" y1="150" x2="850" y2="150" stroke="#1a1714" stroke-width="2"/>
+
+  <g stroke="#6e6960" stroke-width="1">
+   <line x1="50" y1="145" x2="50" y2="155"/>
+   <line x1="250" y1="145" x2="250" y2="155"/>
+   <line x1="450" y1="145" x2="450" y2="155"/>
+   <line x1="650" y1="145" x2="650" y2="155"/>
+   <line x1="850" y1="145" x2="850" y2="155"/>
+  </g>
+  <g font-family="Courier New, monospace" font-size="11" font-weight="700" fill="#6e6960">
+   <text x="50" y="175" text-anchor="middle">2022</text>
+   <text x="250" y="175" text-anchor="middle">2023</text>
+   <text x="450" y="175" text-anchor="middle">2024</text>
+   <text x="650" y="175" text-anchor="middle">2025</text>
+   <text x="850" y="175" text-anchor="middle">2026</text>
+  </g>
+
+  <circle cx="90" cy="150" r="7" fill="#2d7d46"/>
+  <line x1="90" y1="143" x2="90" y2="98" stroke="#2d7d46" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="90" y="88" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#2d7d46">Mar 2022</text>
+  <text x="90" y="72" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">CIRCIA signed</text>
+  <text x="90" y="58" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">into law</text>
+
+  <circle cx="500" cy="150" r="7" fill="#2456a4"/>
+  <line x1="500" y1="143" x2="500" y2="98" stroke="#2456a4" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="500" y="88" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#2456a4">Apr 2024</text>
+  <text x="500" y="72" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">NPRM published</text>
+  <text x="500" y="58" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">(on 24-mo deadline)</text>
+
+  <circle cx="750" cy="150" r="7" fill="#9e2a0f"/>
+  <line x1="750" y1="143" x2="750" y2="98" stroke="#9e2a0f" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="750" y="88" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#9e2a0f">Oct 2025</text>
+  <text x="750" y="72" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">Original deadline</text>
+  <text x="750" y="58" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" font-weight="700" fill="#9e2a0f">MISSED</text>
+
+  <rect x="800" y="143" width="14" height="14" fill="none" stroke="#a67c00" stroke-width="2" transform="rotate(45 807 150)"/>
+  <line x1="830" y1="157" x2="830" y2="205" stroke="#a67c00" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="830" y="220" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#a67c00">May 2026</text>
+  <text x="830" y="235" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">New target</text>
+  <text x="830" y="249" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">(further delays likely)</text>
+
+  <circle cx="460" cy="150" r="6" fill="#9e2a0f" stroke="#fff" stroke-width="1.5"/>
+  <line x1="460" y1="157" x2="460" y2="205" stroke="#9e2a0f" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="460" y="220" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#9e2a0f">Feb 2024</text>
+  <text x="460" y="235" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">Change Healthcare</text>
+  <text x="460" y="249" text-anchor="middle" font-family="Source Serif 4, serif" font-size="10.5" fill="#3d3833">attack (2 yrs in)</text>
+
+  <text x="450" y="278" text-anchor="middle" font-family="Courier New, monospace" font-size="10" fill="#6e6960" font-style="italic">Mandatory reporting was not operational when Change Healthcare struck at the mid-point.</text>
+ </svg>
+ <p class="diagram-c">The gap between urgency and implementation. CIRCIA was signed in direct response to Colonial Pipeline and SolarWinds, but the final rule has been pushed back repeatedly.</p>
+ </div>
  </div></section>
 
  <section class="s" id="gaps"><div class="si">
@@ -429,26 +524,21 @@ img{max-width:100%;display:block}
  <h3>1. Voluntary means optional</h3>
  <p>The <em class="ref">NIST Cybersecurity Framework</em> is a well-designed document. In fact, it is a framework by design. Thus, it outlines cybersecurity goals across its six functions (Govern, Identify, Protect, Detect, Respond, Recover) and then adds categories and subcategories below them. It does not tell anyone what to do.
 </p>
- <p>Whether or not a particular CI sector is mandated to use the CSF framework will depend entirely on whether its sectoral regulator has binding powers in the first place and chooses to exercise them. The financial services sector follows <em class="ref">Gramm-Leach-Bliley</em> together with Interagency Guidelines Establishing Information Security Standards (12 CFR Part 30, Appendix B; for national banks and similar provisions for other kinds of regulated organizations); FFIEC Cybersecurity Assessment Tool; and Part 500 from NYDFS. The nuclear power plants are subject to NRC's cybersecurity requirements that mandate certain protections be taken concerning the critical digital assets. They have clear cybersecurity obligations with enforcement.</p>
  <p>The healthcare sector is subject to <em class="ref">HIPAA Security Rule</em>. This rule dates back to 2003 and has had a substantive update as recently as in 2013. It requires neither multi-factor authentication nor encryption standards or any such specifics. The single-sentence section regarding authentication is all there is in the HIPAA Security Rule. Furthermore, its enforcement by HHS is a backward look that assesses whether a breached organization had "reasonable and appropriate" protection; many of those fined for breaches usually agree to pay relatively minor amounts to resolve disputes. The Change Healthcare breach happened in an environment where the HIPAA Security Rule technically required "authentication procedures," but nothing that could prevent this kind of attack.
 </p>
  <p>Water/wastewater services are even more of a problem. There are about 150,000 water utility companies in the United States; the vast majority of those are small municipalities. The EPA tried to force its hand using the <em class="ref">Safe Drinking Water Act</em>, by requiring water utilities to conduct cybersecurity assessments in their risk assessments. However, in Attorneys General of Missouri et al. v. EPA (8th Cir., 2023), the Eight Circuit ruled in favor of the Attorneys General, finding that the statute did not give the EPA the authority to do that. As of early 2026, there is no cybersecurity requirement in water utilities.</p>
 
  <h3>2. Fragmentation across sixteen agencies</h3>
  <p>The 16 CI sectors are overseen by 16 separate SRMAs, although certain agencies regulate more than one sector, especially CISA, which regulates eight sectors. These organizations vary greatly in their powers, resources, culture, and historical performance. Some, such as the Nuclear Regulatory Commission and financial regulators, are safety-and-soundness professionals with long histories of enforcement of complicated technical standards. Others, like EPA with respect to water, possess very little cybersecurity know-how and legal authority.</p>
- <p>This means that security in the field of CI will always rely on whatever sector is the least secure, since hackers will target whatever is easiest. The attack on Colonial Pipeline did not take place because the pipeline industry was inherently more insecure than any other; rather, it took place because the pipeline industry was not regulated with respect to cyber protection before May 28, 2021, when banks and nuclear facilities had long since been regulated. The Change Healthcare breach did not occur because Citrix portals pose an extraordinary risk; rather, it occurred because HIPAA regulations did not mandate MFA.</p>
 
  <h3>3. <em class="ref">CIRCIA</em> is running years behind</h3>
  <p><em class="ref">CIRCIA</em> became law in March 2022 as a result of the Colonial Pipeline and SolarWinds incidents demonstrating that there was no complete visibility for the government on cyber attacks at the critical infrastructure level. The deadlines set out under the legislation (24 months from introduction to NPRM, 18 months from NPRM to final rule) were reflective of this urgency. However, when the NPRM finally arrived in April 2024, it was highly controversial. It was claimed by industry organizations that the dual test of coverage was overly broad, that the 72-hour deadline to report was impractical due to ongoing incident response activities, that the record retention provisions were too strict, and that the ransomware payment reporting requirement incentivized non-cooperation.</p>
- <p>The criticism is valid in part. A deadline of 72 hours while trying to mitigate the breach and figure out its scope is very challenging indeed. The other criticism is motivated by vested interests because reporting will expose many embarrassing facts about cybersecurity operations, and it would be much more convenient for covered entities not to report. In any case, the reason why CISA decided to move the finalization of the rule until May 2026 lies in the sheer number of significant issues with it, and even further delays seem likely in light of the town hall disruptions in February 2026. However, the pattern of 'one incident – one sector response' remains, as evident from the examples of the case studies.</p>
 
  <h3>4. Disruption without persistence</h3>
  <p>American law enforcement agencies and their intelligence services are not lacking in the technical capabilities to interfere with ransomware activities. The FBI's anti-Hive ("Dagon") operation was conducted between July 2022 and January 2023. In the seven-month duration of that operation, FBI officers remained within Hive's IT infrastructure collecting encryption keys in stealth mode and handing them out to their owners who were not ready to pay, helping more than 300 people to save $130 million. Finally, the FBI took down Hive's servers on January 26, 2023, together with its German and Dutch counterparts.</p>
  <p>Disruption of ALPHV/BlackCat in December 2023 followed the same pattern. Through cooperation between the FBI and its foreign partners, ALPHV's leak site on the dark web was taken down, and the group's decryption tool was released. Weeks later, ALPHV had restored its infrastructure using other servers and got back to work. Within two months, an ALPHV affiliate was responsible for an attack on Change Healthcare. The problem is not that disruption cannot succeed; disruption obviously succeeds temporarily. Disruption will change nothing if it's limited to temporary operations. Disruption has to be sustained because these groups have no capital structure that can be destroyed and their infrastructure rebuilt within days with a new list of affiliates.</p>
- <p>The <em class="ref">Joint Ransomware Task Force</em>, established under <em class="ref">CIRCIA</em> § 681d, is supposed to be the coordinating body for this work. The task force is jointly led by CISA and FBI, and has had notable successes in terms of operations. However, it is not sufficiently funded to do all of the work needed, since it merely coordinates what agencies are doing.</p>
 
  <h3>5. CISA cannot compel anyone in the private sector</h3>
- <p>It should also be noted that CISA enjoys a highly regarded technical toolkit: it publishes a list of Known Exploited Vulnerabilities (KEVs); it runs Protective DNS to prevent malicious DNS queries by federal government agencies and a rising number of state, local, tribal, and territorial (SLTT) government entities as well as their private sector partners; it releases joint security alerts and advisories; it organizes and conducts incident response actions. Binding Operational Directives have been used against civilian executive branch federal agencies as part of CISA's authority in a rather aggressive way, such as <em class="ref">BOD 22-01</em> requiring timely remediation of vulnerabilities from the KEV list (issued in November 2021), <em class="ref">BOD 23-01</em> obliging federal agencies to have complete visibility and vulnerability detection, etc.</p>
  <p>However, that power ends with the federal networks. CISA cannot instruct a hospital to mitigate vulnerabilities on its KEV list. CISA cannot instruct a water utility to implement multi-factor authentication. CISA cannot require a pipeline company to install an endpoint detection and response system. CISA can advise, coordinate, collaborate, and provide free technical support. Whether or not the private actor implements those recommendations is solely up to them. That is the critical structural problem. The federal organization with the greatest technical expertise and situational awareness of the threat lacks any power to ensure compliance. After the Colonial attack, TSA received new powers over pipelines. Following the Change Healthcare hack, HHS is working on updating HIPAA. Yet CISA, the interagency coordination organization, remains voluntary.</p>
  </div></section>
 
@@ -460,7 +550,6 @@ img{max-width:100%;display:block}
  <img src="CSF-wheel-revamp-final-white.png" alt="NIST Cybersecurity Framework 2.0" style="border:1px solid #d5d0c8">
  <p style="font-family:var(--mono);font-size:.82rem;color:#6e6960;margin-top:.4rem"><em class="ref">NIST Cybersecurity Framework</em> 2.0 core functions. Source: NIST.gov</p>
  </div>
- <p>The CSF is a well-designed, applicable tool. Companies that use the CSF seriously are safer than companies that ignore the CSF. The issue is the term "voluntary." Without regulation from the sector that obligates the company to apply the CSF or even check its performance, the healthcare company may just put up a facade by applying the CSF while its systems remain unpatched, multifactor authentication remains switched off in its remote access, and it does not test its backup. The CSF is about what excellence should look like. It is not about bringing out excellence. Unless there is legislation from the sector level that demands certain achievements, the CSF is a guide for companies that desire security.</p>
  </div></section>
 </div>
 
@@ -472,15 +561,10 @@ img{max-width:100%;display:block}
  <div class="tag blue">Institutional Design</div>
  <h2>The NCSC: One Agency, Not Seven</h2>
  <p>The United Kingdom established the National Cyber Security Centre in October of 2016 as the publicly facing operation component of GCHQ (Government Communications Headquarters), the UK equivalent of NSA. This is on purpose. The UK model is such that the agency responsible for carrying out offensive signals intelligence is also responsible for the defensive cybersecurity efforts of the country, working through the same operational chain of command, sharing analysts, the same infrastructure and sharing threat intelligence real-time without the need for any classification considerations. This would not go down well in the U.S. because of the established split between signals intelligence and civilian cybersecurity in the U.S., as well as justifiably, civil liberty concerns. But it does mean something.</p>
- <p>Because of civil liberty concerns in the U.S., civilian cybersecurity is run by CISA, which is in turn housed within the DHS. On the other hand, signals intelligence is carried out by the NSA, housed in DOD. While justified due to legitimate civil liberty concerns, such as the legal restrictions placed upon NSA from conducting domestic operations, the U.S. model still results in a certain operational disadvantage when it comes to defending American infrastructure from cyber threats. Namely, while the UK NCSC doesn't have to deal with any of that, the U.S. must.</p>
  <p>Alongside the integration of its intelligence, the NCSC is responsible for running the <em class="ref">Active Cyber Defence</em> (ACD) program. ACD comprises a series of automated, national-scale defensive measures that are part of public infrastructure. Protective DNS prevents the querying of malicious domains at scale for all public-sector entities in the UK. Takedown services remove phishing pages and malware from UK infrastructure (millions of malicious URLs have been taken down each year by the NCSC). Mail Check provides DMARC/SPF/DKIM-based email authentication at scale for government agencies and more. This makes spoofing UK Government emails difficult. The Suspicious Email Reporting Service (SERS) allows anyone in the public to report any phishing emails to a specific email address.</p>
 
  <div class="quote">The NCSC is the UK's technical authority on cyber security. Since our launch in 2016, we have worked to make the UK the safest place to live and work online. Active Cyber Defence seeks to reduce the harm from commodity cyber attacks by providing tools and services that protect against a wide range of cyber security threats.
  <span class="src">&mdash; NCSC, "Active Cyber Defence: The Fourth Year," 2021</span>
- </div>
-
- <div style="margin:1.5rem 0">
- <p style="font-family:var(--mono);font-size:.82rem;color:var(--ink3);margin:.5rem 0">US vs UK institutional structure for cybersecurity coordination.</p>
  </div>
  </div></section>
 
@@ -492,10 +576,97 @@ img{max-width:100%;display:block}
  <p>The problem of determining whether an OES satisfies the "appropriate and proportionate measures" test is solved using the NCSC's <em class="ref">Cyber Assessment Framework</em> (<em class="ref">CAF</em>). The current version of CAF is 3.2, and it is designed according to four overarching objectives, namely, (A) the management of security risks; (B) protection from cyber attacks; (C) detection of cyber security incidents; and (D) mitigation of the adverse effects of such incidents. For each of these objectives, there are 14 contributing principles, and underneath each principle, there are "contributing outcomes" and "indicators of good practice" (IGPs).</p>
  <p>The approach underlying <em class="ref">CAF</em> is outcome-based and not prescriptive. The framework does not tell the regulated organisations that they have to deploy TLS 1.3 or that they have to use a certain EDR vendor. Instead, it states that "you protect data stored in your network and information systems from unauthorised access, modification, or deletion" and then goes on to describe what "achieved," "partially achieved," and "not achieved" mean. Each competent authority determines its sector's "CAF Profiles" in accordance with the desired level of accomplishment that regulated organisations need to attain. There are only two recognised profile levels of the CAF: Basic (sector baseline) and Enhanced (advanced threats).</p>
  <p>That is the system that America lacks. The <em class="ref">NIST Cybersecurity Framework</em> (CSF) explains what good looks like but does not include a required level. The <em class="ref">Cyber Assessment Framework</em> (<em class="ref">CAF</em>) explains what good looks like, sets a required level for each objective, and mandates that companies must achieve that level, with financial penalties for failure.</p>
+ </div></section>
 
- <h3>What's changing: the <em class="ref">Cyber Security and Resilience Bill</em></h3>
- <p>In 2025, the UK government proposed the <em class="ref">Cyber Security and Resilience Bill</em> to Parliament. This Bill modifies the <em class="ref">NIS Regulations</em> and does the following essential things. It includes the data centers (those that have capacity above 1MW) and the managed service providers (MSPs) explicitly within the scope of applicability of the regulations. It also enlarges the category of reportable incidents, adding those that affect the confidentiality, availability, and integrity of services, not just their continuity. It implements a two-tier notification system that aligns with the EU's NIS 2 directive, which involves the immediate (within 24 hours) reporting followed by a more comprehensive report submitted within 72 hours. It also introduces the concept of designated critical suppliers, allowing extending the requirements to certain third parties, such as the ones the disruption of whose services could create an undesirable cascade effect. Finally, it grants the UK Government the authority to implement cybersecurity directions in particular circumstances involving the threat to critical national infrastructure and services.</p>
- <p>The UK proposal came in response to the cyberattacks such as the one on Change Healthcare, the global IT outage by CrowdStrike in July 2024, and the increasing reliance on national services in a few large companies. It explicitly recognizes the inadequacy of the currently applicable NIS regulations (only 5 sectors of OES plus a small group of DSPs). There is no similar legislation under discussion in the USA.</p>
+ <section class="s"><div class="si w">
+ <div class="diagram">
+ <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="US vs UK regulatory structure comparison">
+  <text x="450" y="22" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="14" fill="#1a1714">Regulatory Structure: Fragmented vs. Centralized</text>
+
+  <text x="225" y="52" text-anchor="middle" font-family="Courier New, monospace" font-size="11" font-weight="700" fill="#9e2a0f" letter-spacing="2">UNITED STATES</text>
+  <line x1="450" y1="45" x2="450" y2="305" stroke="#d5d0c8" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="675" y="52" text-anchor="middle" font-family="Courier New, monospace" font-size="11" font-weight="700" fill="#1a7a6d" letter-spacing="2">UNITED KINGDOM</text>
+
+  <g>
+   <rect x="160" y="70" width="130" height="34" fill="#fff" stroke="#1a1714" stroke-width="2" rx="3"/>
+   <text x="225" y="92" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="12" fill="#1a1714">Congress / WH</text>
+   <line x1="225" y1="104" x2="225" y2="120" stroke="#6e6960" stroke-width="1"/>
+
+   <g font-family="DM Sans, sans-serif" font-size="10" font-weight="600" fill="#1a1714">
+    <rect x="20" y="120" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="62" y="138" text-anchor="middle">CISA / DHS</text>
+    <rect x="110" y="120" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="152" y="138" text-anchor="middle">HHS / OCR</text>
+    <rect x="200" y="120" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="242" y="138" text-anchor="middle">TSA / DOT</text>
+    <rect x="290" y="120" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="332" y="138" text-anchor="middle">EPA</text>
+
+    <rect x="20" y="155" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="62" y="173" text-anchor="middle">NRC</text>
+    <rect x="110" y="155" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="152" y="173" text-anchor="middle">Treasury</text>
+    <rect x="200" y="155" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="242" y="173" text-anchor="middle">DOE</text>
+    <rect x="290" y="155" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="332" y="173" text-anchor="middle">DOD</text>
+
+    <rect x="20" y="190" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="62" y="208" text-anchor="middle">FBI / DOJ</text>
+    <rect x="110" y="190" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="152" y="208" text-anchor="middle">USDA/FDA</text>
+    <rect x="200" y="190" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="242" y="208" text-anchor="middle">GSA</text>
+    <rect x="290" y="190" width="85" height="28" fill="#fff" stroke="#9e2a0f" rx="2"/>
+    <text x="332" y="208" text-anchor="middle">+ 5 more</text>
+   </g>
+
+   <line x1="62" y1="220" x2="62" y2="245" stroke="#6e6960" stroke-width="1"/>
+   <line x1="332" y1="220" x2="332" y2="245" stroke="#6e6960" stroke-width="1"/>
+   <line x1="62" y1="245" x2="332" y2="245" stroke="#6e6960" stroke-width="1"/>
+   <line x1="197" y1="245" x2="197" y2="260" stroke="#6e6960" stroke-width="1"/>
+
+   <rect x="85" y="260" width="225" height="30" fill="#fff" stroke="#1a1714" stroke-width="1.5" rx="3"/>
+   <text x="197" y="279" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#1a1714">16 CI Sectors</text>
+
+   <text x="225" y="310" text-anchor="middle" font-family="Courier New, monospace" font-size="10" fill="#9e2a0f" font-style="italic">Mostly voluntary · inconsistent enforcement</text>
+  </g>
+
+  <g>
+   <rect x="610" y="70" width="130" height="34" fill="#fff" stroke="#1a1714" stroke-width="2" rx="3"/>
+   <text x="675" y="92" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="12" fill="#1a1714">Parliament / HMG</text>
+   <line x1="675" y1="104" x2="675" y2="125" stroke="#6e6960" stroke-width="1"/>
+
+   <rect x="585" y="125" width="180" height="40" fill="#fff" stroke="#1a7a6d" stroke-width="2" rx="3"/>
+   <text x="675" y="142" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="13" fill="#1a7a6d">NCSC (GCHQ)</text>
+   <text x="675" y="157" text-anchor="middle" font-family="Courier New, monospace" font-size="9" fill="#6e6960">one technical authority</text>
+
+   <line x1="675" y1="165" x2="675" y2="185" stroke="#6e6960" stroke-width="1"/>
+   <line x1="595" y1="185" x2="755" y2="185" stroke="#6e6960" stroke-width="1"/>
+   <line x1="595" y1="185" x2="595" y2="200" stroke="#6e6960" stroke-width="1"/>
+   <line x1="675" y1="185" x2="675" y2="200" stroke="#6e6960" stroke-width="1"/>
+   <line x1="755" y1="185" x2="755" y2="200" stroke="#6e6960" stroke-width="1"/>
+
+   <rect x="555" y="200" width="80" height="28" fill="#fff" stroke="#1a7a6d" rx="2"/>
+   <text x="595" y="218" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="600" font-size="10" fill="#1a1714">Ofgem</text>
+   <rect x="635" y="200" width="80" height="28" fill="#fff" stroke="#1a7a6d" rx="2"/>
+   <text x="675" y="218" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="600" font-size="10" fill="#1a1714">Ofcom</text>
+   <rect x="715" y="200" width="80" height="28" fill="#fff" stroke="#1a7a6d" rx="2"/>
+   <text x="755" y="218" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="600" font-size="10" fill="#1a1714">DHSC</text>
+
+   <line x1="595" y1="228" x2="595" y2="245" stroke="#6e6960" stroke-width="1"/>
+   <line x1="755" y1="228" x2="755" y2="245" stroke="#6e6960" stroke-width="1"/>
+   <line x1="595" y1="245" x2="755" y2="245" stroke="#6e6960" stroke-width="1"/>
+   <line x1="675" y1="245" x2="675" y2="260" stroke="#6e6960" stroke-width="1"/>
+
+   <rect x="562" y="260" width="226" height="30" fill="#fff" stroke="#1a1714" stroke-width="1.5" rx="3"/>
+   <text x="675" y="279" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="11" fill="#1a1714">Operators of Essential Services</text>
+
+   <text x="675" y="310" text-anchor="middle" font-family="Courier New, monospace" font-size="10" fill="#1a7a6d" font-style="italic">Mandatory CAF · fines up to £17M per breach</text>
+  </g>
+ </svg>
+ <p class="diagram-c">US vs UK institutional structure for cybersecurity coordination.</p>
+ </div>
  </div></section>
 
  <section class="s"><div class="si w">
@@ -518,8 +689,6 @@ img{max-width:100%;display:block}
  <section class="s"><div class="si">
  <div class="tag">Takeaways</div>
  <h2>What Actually Translates</h2>
- <p>The full UK model does not transplant cleanly. The United States is six times larger in population, much bigger economically, more constitutionally protected in terms of government regulatory powers over businesses, raises real civil-liberties issues concerning having a civilian cyber security organization within the intelligence agencies, and has the federal system of fifty states, making any national regulation more difficult. All these factors have to be taken into account.</p>
- <p>However, there are three key aspects of the British model which can be adopted without adopting the entire framework of the UK policy because they solve the problem areas identified in the American examples.</p>
  <p><strong>Outcome-based mandatory baselines are achievable.</strong> <em class="ref">NIS Regulations</em> provide proof that a government can mandate desired security results from ES providers without mandating technology or limiting innovation. <em class="ref">CAF</em>'s objective of four is very close to how sector regulators in the United States consider cybersecurity issues. The <em class="ref">HIPAA Security Rule NPRM</em>, for example, seeks to achieve the same objectives in the healthcare industry. What the United Kingdom demonstrates is that this process can be generalized horizontally to cover all critical infrastructure sectors rather than litigating on a sector-by-sector basis each time there is an incident.</p>
  <p><strong>ACD in the UK is an example of how nation-wide automated defense systems can work, being both technically possible and effective.</strong> Every year, they protect the network from millions of attacks at nearly zero marginal cost per customer. The protective domain name system operated by CISA is technically identical, but works only for federal agencies and a handful of SLTTs and commercial customers who voluntarily participate. Scaling up such systems to cover the entire nation is possible and straightforward from an engineering perspective.</p>
  <p><strong>A single lead agency with statutory authority is faster than inter-agency coordination.</strong> The idea of one NCSC rather than the sum total of CISA, NSA, FBI, and sixteen SRMAs as seen in the British system is not easily reproducible. However, the key point to be taken from this is the possibility of empowering CISA's responsibilities to a much larger extent (as in Recommendation 3) without disbanding DHS, FBI, and NSA altogether. The relevant issue to discuss would thus not be whether CISA should turn into MI5/GCHQ, but how far should its scope extend vis-à-vis the private sector.</p>
@@ -545,17 +714,9 @@ img{max-width:100%;display:block}
  <div class="tag">01</div>
  <h2>Mandatory Minimum Cybersecurity Standards for All 16 CI Sectors</h2>
 
- <h3>What the case studies showed</h3>
- <p>The Colonial Pipeline hack occurred due to an account on the company’s network that did not have MFA. The Change Healthcare hack resulted from an account on the company’s Citrix portal not having MFA. Two separate industries hit at a three-year gap in time, yet the one constant is that neither had MFA. Both were due to an attack using stolen credentials, and the only reason that the hackers were able to compromise their targets successfully is that the accounts lacked MFA.</p>
-
- <h3>What the gap is</h3>
- <p>There is currently no intersectoral standard for cybersecurity minimums in the U.S., and the sectors themselves are regulated independently, each being subject to an entirely different level of regulation. The banking industry and nuclear power plants are regulated properly; the water industry is basically unregulated following the decision by the Eighth Circuit Court in the case related to the EPA <em class="ref">Sanitary Survey</em> memorandum in 2023; regulations concerning healthcare industry go back to 2013 and don't even mention MFA.</p>
-
  <h3>What should change</h3>
- <p>Congress needs to create a sector-agnostic cybersecurity benchmark based on outcomes rather than specific technologies, similar to the UK’s <em class="ref">Cyber Assessment Framework</em>. This benchmark must describe what the outcome of an organization’s cybersecurity practices should be without tying itself down to current technologies that will soon become obsolete.</p>
- <p>At a minimum, the following must be required by this baseline: multi-factor authentication for remote access and privileged user access (phishing-resistant factors for highest-privilege users), remediation of all vulnerabilities listed in CISA’s KEV catalog within the same time frames as <em class="ref">BOD 22-01</em> requires for federal agencies, logical segregation of IT from OT environments and business environments from those handling regulated data, encryption of, testing of, and segregating of backups from their primary storage offline, incident response plan development and regular exercises, and some level of supply chain risk management and vendor security attestations.</p>
- <p>Enforcement can occur through existing SRMAs that already have expertise within the sector and know how to engage the private sector. The baseline can serve as a floor; sectors that have strong regulations (financial services, nuclear) will continue to follow those more stringent regulations. For sectors that do not have strong regulations (the health care industry, outside the HIPAA NPRM, water, food and agriculture) the baseline regulations will be imposed on them. Any sector that does not currently have statutory authority for implementing regulations (EPA with water, after the decision by the Eighth Circuit) needs statutory authority to do so.</p>
- <p>Small entities that really don't have resources (small rural hospitals, small water utilities, small manufacturing businesses) must receive federal assistance in implementing these standards. There is already a model for doing this in the State and Local Cybersecurity Grant Program of <em class="ref">CIRCIA</em> § 681g. The idea here is that resource limitations cannot be used as an excuse for exemption from cybersecurity standards.</p>
+ <p>Congress needs to create a sector-agnostic cybersecurity benchmark based on outcomes rather than specific technologies, similar to the UK's <em class="ref">Cyber Assessment Framework</em>. This benchmark must describe what the outcome of an organization's cybersecurity practices should be without tying itself down to current technologies that will soon become obsolete.</p>
+ <p>At a minimum, the following must be required by this baseline: multi-factor authentication for remote access and privileged user access (phishing-resistant factors for highest-privilege users), remediation of all vulnerabilities listed in CISA's KEV catalog within the same time frames as <em class="ref">BOD 22-01</em> requires for federal agencies, logical segregation of IT from OT environments and business environments from those handling regulated data, encryption of, testing of, and segregating of backups from their primary storage offline, incident response plan development and regular exercises, and some level of supply chain risk management and vendor security attestations.</p>
 
  <div class="pq"><p>Any discussion about whether cybersecurity standards should be made mandatory in critical infrastructures comes to an end with Colonial and Change Healthcare. The only thing that remains is the issue of designing these standards, meaning how to develop them in a way that ensures their enforceability but also leaves them non-prescriptive and proportional.</p></div>
  </div></section>
@@ -564,34 +725,23 @@ img{max-width:100%;display:block}
  <div class="tag blue">02</div>
  <h2>Finish CIRCIA Implementation</h2>
 
- <h3>What the case studies showed</h3>
- <p>These three attacks took place in an environment where there was no systematic visibility by the federal government in terms of cyber security incidents. The government was made aware of the WannaCry attack through the media. Similarly, the government only became aware of the Colonial attack once it came to know that the company’s pipelines had stopped functioning. Lastly, the government became aware of the Change Healthcare attack after receiving notifications from pharmacies nationwide that they were unable to process claims.</p>
-
  <h3>What the gap is</h3>
  <p><em class="ref">CIRCIA</em> was designed precisely to address these shortcomings. Enacted in March 2022, the law obligated CISA to publish a final rule within 42 months (until September 2025). CISA met its NPRM deadline in April 2024, but moved its deadline for publishing a final rule back from October 2025 to May 2026. The planned February 2026 town hall meetings, intended to provide additional public feedback, were disrupted due to a funding lapse at DHS. In April 2026, a final rule had yet to be issued. Four years after the enactment, mandatory reporting was still not in place.</p>
- <p>There is no doubt some merit behind the industry concerns that led to the delays. The requirement of 72 hours of reporting is indeed very tight for entities during the middle of an active incident. The NPRM coverage test with its two tracks (SBA size thresholds AND/OR sector-based criteria) includes entities that would never be considered critical infrastructure. The preservation of data is costly. There certainly are valid reasons behind these problems. Yet, the longer the rulemaking process takes, the more incidents occur without necessary information exchange.</p>
 
  <h3>What should change</h3>
  <p>The CISA must work towards finalizing and issuing the rule before the deadline of May 2026 despite the possibility of having to limit the coverage initially only to expand it gradually via future rulemaking processes. An imprecise rule that is functional is much better than the precise rule that is delayed by another two years.</p>
- <p>In particular, CISA must: (1) adopt a tiered process whereby the biggest companies in each industry are initially required to report, followed by the smaller companies as the intake capability of CISA is expanded; (2) define “reasonable belief” concerning the 72-hour reporting requirement such that there would be reasonable justification for reporting delay when the scope of the event remains unclear; (3) finalize the definition of a substantial cyber incident based on practical examples (shutting down a pipeline, shutting down a payment processor, shutting down a hospital); and (4) establish the legal protection provided by effectively to encourage compliance.</p>
- <p>Beyond the finalization of the rule, Congress may look into making amendments to <em class="ref">CIRCIA</em> that will enable an anonymous dataset to be made public. Each quarter, CISA will provide aggregate figures about the number of attacks, the sector that was attacked, the type of attack, and the TTPs used in addition to details regarding the payment of ransom. That is how the banks managed to improve their operational risk management after the Basel II requirement.</p>
- <p>Finally, ransom payments data should be immediately shared with the Financial Crimes Enforcement Network (FinCEN) within the Treasury Department, so it can compare such data with the SDN list and sanctioned cryptocurrencies addresses. For example, the ransom payment executed by Change Healthcare in March 2024 to ALPHV using blockchain transaction technology that has been easily accessible in a couple of hours after its execution, should have become the subject for immediate action.</p>
+ <p>In particular, CISA must: (1) adopt a tiered process whereby the biggest companies in each industry are initially required to report, followed by the smaller companies as the intake capability of CISA is expanded; (2) define "reasonable belief" concerning the 72-hour reporting requirement such that there would be reasonable justification for reporting delay when the scope of the event remains unclear; (3) finalize the definition of a substantial cyber incident based on practical examples (shutting down a pipeline, shutting down a payment processor, shutting down a hospital); and (4) establish the legal protection provided by effectively to encourage compliance.</p>
  </div></section>
 
  <section class="s" id="r3"><div class="si">
  <div class="tag green">03</div>
  <h2>Give CISA Real Authority for Active Incidents</h2>
 
- <h3>What the case studies showed</h3>
- <p>In all three cases, CISA recognized vulnerabilities and had noticed the pattern of attack very early. In the case of Colonial, CISA had released its alert about the DarkSide attack in just a few days. In the case of the Change Healthcare attack, once again, CISA had a hand in the investigation. However, it could not mandate any action from any other organization, in either case, in the affected industry. CISA could recommend, raise the alarm, and help. It could not order any one hospital to use MFA in its Citrix portal.</p>
-
  <h3>What the gap is</h3>
  <p>The statutory jurisdiction of CISA grants it wide-ranging coordination, information sharing, and technical assistance capabilities. The Binding Operational Directive jurisdiction granted by the Cybersecurity Act of 2015 only applies to the federal civilian executive branch agencies. In the case of the private sector, CISA has limited jurisdiction in terms of advisory guidance, alerts, and the Joint Cyber Defense Collaborative (<em class="ref">JCDC</em>), which is a voluntary information sharing arrangement.</p>
 
  <h3>What should change</h3>
- <p>The Congress should modify the CISA’s statutory authorities to establish an "Emergency Cyber Security Directive" that will allow CISA to compel owners and operators of critical infrastructure during an ongoing incident. The new power must target the specific problem highlighted by the two case studies – that is, a known weakness that is under attack while the other targets remain vulnerable.</p>
- <p>In particular, such a directive authority should (a) be limited to entities in targeted sectors that have been determined to constitute critical infrastructure; (b) be activated by a specific incident, namely an exploit using a listed KEV that is used to target entities in a particular sector, or a finding by CISA that a particular vulnerability or misconfiguration is being utilized in a concerted effort against CI; (c) be temporary in nature (e.g., lasting for 30 days and renewable for another 90 on specified findings); (d) impose an action that is narrowly remedial in nature (patch this KEV, activate multifactor authentication on this system type, etc.), as opposed to regulatory; (e) provide for an expedited appeal for those entities that cannot meet the directive within the time frame, with evidence of alternate controls; and (f) contain a safe harbor provision for compliant entities.</p>
- <p>This framework is present and well known in other situations. The FAA will give out an Emergency Airworthiness Directive if a particular safety problem in aircraft warrants immediate attention. The FDA will give out recall orders in the event of a food safety emergency. The banking regulatory authorities will take measures to deal with a liquidity crisis. All these represent emergency powers that have been granted to a knowledgeable regulator for a limited period.</p>
+ <p>The Congress should modify the CISA's statutory authorities to establish an "Emergency Cyber Security Directive" that will allow CISA to compel owners and operators of critical infrastructure during an ongoing incident. The new power must target the specific problem highlighted by the two case studies – that is, a known weakness that is under attack while the other targets remain vulnerable.</p>
  <p>This is not about making CISA a general cybersecurity regulator. Rather, this is about enabling CISA with the appropriate authority to compel hospitals across the nation to shut down unmaintained Citrix portals during the three-week window following the Change Healthcare hack, while the exact tactics, techniques, and procedures (TTPs) were actively employed against other healthcare organizations. This would have represented an important contribution to national security, with virtually no impact on organizations not affected by the threat.</p>
  </div></section>
 
@@ -599,43 +749,27 @@ img{max-width:100%;display:block}
  <div class="tag amber">04</div>
  <h2>Address Concentration Risk: Systemically Important CI Entities</h2>
 
- <h3>What the case studies showed</h3>
- <p>Change Healthcare handles about one-third of all American patient files. Colonial Pipeline transports 45 percent of the gasoline used on the eastern seaboard. This is not your everyday corporation. These two organizations represent crucial infrastructure that can take an entire industry offline with the flick of a switch. The effects of a shutdown at one of these companies will be felt by millions of people just days after the incident. In the case of Change Healthcare, the attacks resulted in independent pharmacies being unable to fulfill prescription orders, hospitals unable to receive payments for services rendered, and health clinics unable to pay their staff.</p>
-
  <h3>What the gap is</h3>
- <p>The regulation for the security in America such as the <em class="ref">HIPAA Security Rule NPRM</em> focuses on entities rather than systems. In America, the regulation for a 500-bed hospital is very similar to that of the entity processing a third of the country’s health care transaction system. The only parallel that comes close to the designation of <em class="ref">SIFI</em> in CI would be the creation of this type of designation in the banking sector after the 2008 financial crisis. The creation of the Systematically Important Financial Institutions through the <em class="ref">Dodd-Frank</em> Wall Street Reform and Consumer Protection Act of 2010 enables the Financial Stability Oversight Council to designate non-bank financial institutions which pose risks of failure to the financial system as SIFIs.</p>
+ <p>The regulation for the security in America such as the <em class="ref">HIPAA Security Rule NPRM</em> focuses on entities rather than systems. In America, the regulation for a 500-bed hospital is very similar to that of the entity processing a third of the country's health care transaction system. The only parallel that comes close to the designation of <em class="ref">SIFI</em> in CI would be the creation of this type of designation in the banking sector after the 2008 financial crisis. The creation of the Systematically Important Financial Institutions through the <em class="ref">Dodd-Frank</em> Wall Street Reform and Consumer Protection Act of 2010 enables the Financial Stability Oversight Council to designate non-bank financial institutions which pose risks of failure to the financial system as SIFIs.</p>
 
  <h3>What should change</h3>
  <p>It is recommended that Congress establish a similar designation process for organizations providing digital infrastructure services, the disruption of which may endanger a critical infrastructure sector. The designating entity would be an already established one (such as CISA itself, or a newly formed interagency council with CISA and the appropriate SRMA co-chairing), based on considerations such as market concentration, interconnectedness, substitutability, complexity, and multi-sector operations.</p>
- <p>Such an organization would have to meet higher requirements in addition to the basic requirements in place for all sectors combined: (1) compulsory annual cybersecurity stress testing based on realistic adversary scenarios, reporting of results to CISA; (2) compulsory business continuity planning involving defined recovery time objectives for key activities; (3) more stringent third party risk management obligations concerning any vendors and suppliers that play a role in the critical infrastructure of the designated organization; (4) annual board certifications in cybersecurity akin to New York State Department of Financial Services (NYDFS) Part 500 Section 500.17; (5) quicker timelines for both incident reporting (possibly 24 hours) and ransom payments; (6) powers for CISA or SRMA to mandate specific remediations if any identified risks undermine the capability of the designated organization to undertake its critical activity.</p>
- <p>Change Healthcare would make the cut under any sensible measure. Colonial Pipeline would make the cut. The big cloud companies would make the cut. A fairly short list of payment networks, health information networks, electric power transmission systems, pipelines, telecom carriers, and some others would make the cut. This designation would not be punitive in nature; rather, it would reflect the fact that such organizations have become essential parts of our country’s infrastructure despite being privately held, and that cybersecurity at those firms is of greater importance to the nation than cybersecurity in regular companies.</p>
- <p>This point is illustrated by the "designated critical supplier" element within the <em class="ref">Cyber Security and Resilience Bill</em> in the UK. This is because the key idea behind this policy is that there is a systemic risk associated with digital infrastructures that traditional regulation systems cannot address.</p>
  </div></section>
 
  <section class="s" id="r5"><div class="si">
  <div class="tag green">05</div>
  <h2>Build Active Defense at Scale and Sustain Disruption</h2>
 
- <h3>What the case studies showed</h3>
- <p>WannaCry managed to infect 150 countries within a few hours due to the lack of any kind of large-scale, automated infrastructure in place to stop it. The Hutchins kill switch worked out of pure luck and not through any sort of policy implementation. The DarkSide group responsible for the Colonial Pipeline attack was disbanded following their operations, but the operators behind DarkSide simply changed their name to BlackMatter and again into ALPHV/BlackCat, which attacked Change Healthcare two months later after the FBI dismantled the ALPHV infrastructure. The point here, from all three instances, is that disruptive actions will never alter the economic incentives driving ransomware attacks.</p>
-
  <h3>What the gap is</h3>
  <p>The U.S. has two separate capabilities that can be described as being grossly under-utilized considering the severity of the threat. First of all, it concerns the implementation of active defense against cyberattacks at the national level via automatic prevention of malware traffic, DNS filtering, email authentication, and elimination of malicious infrastructure. While CISA's Protective DNS is present, it is only utilized by the federal government and some SLTT and private entities. At the same time, NCSC of the UK has such capabilities at a true national scale.</p>
- <p>The second one is offensive disruption for an extended period of time. The FBI’s Hive operation proved what could be achieved with such a tactic – seven months of operations, more than 300 victims being assisted with decryption keys, and an international effort that brought down the criminals behind the operation. However, such efforts have been sporadic up to now.</p>
 
  <h3>What should change</h3>
- <p>Protective DNS, along with other cyber defensive services, should be scaled up to national-level implementation. Congress needs to mandate funding for CISA to deploy Protective DNS to every state, local, territorial, and tribal (SLTT) government by default, all hospitals that qualify for Medicare or Medicaid payment, all water utilities serving more than a certain customer base, and any organization opting into Protective DNS. An email-checking service similar to NCSC’s Mail Check needs to be deployed, mandating DMARC, SPF, and DKIM enforcement on any domain used by a federally-regulated entity.</p>
- <p>The marginal cost of protection per entity will be close to zero. It scales. The obstacle lies with the politics of securing funding and the necessary authorization for offering CISA’s services beyond federal entities. Many aspects of such a system have already received one-time funding (Multi-State Information Sharing and Analysis Center for state/local governments, the Election Infrastructure ISAC), but we need to scale up this approach.</p>
- <p>Second, create a long-term disruption capability against ransomware in the FBI and CISA, supported by funding sufficient to maintain the operation continuously as opposed to periodic operations to shut down particular entities. The <em class="ref">Joint Ransomware Task Force</em> needs to be converted into an operational entity with its own personnel and budget over several years, as well as statutory powers to carry out sustained operations to infiltrate and disrupt major ransomware operators. The objective is to turn being a "ransomware affiliate" into a job in which you always operate under the assumption that you are in an FBI/CISA sting operation.</p>
- <p>Third, work more collaboratively with Treasury’s Office of Foreign Assets Control concerning the sanctioning of cryptocurrencies. This agency has already used their discretion to sanction the mixing services used by ransomware operators to launder money (Tornado Cash in 2022, Blender.io in 2022, and Sinbad.io in 2023). Sanctions alter the economic incentive structure for the money laundering component of the ransomware business model. Increasing the use of such sanctions on addresses identified via <em class="ref">CIRCIA</em> reports will make this process more difficult and expensive.</p>
+ <p>Protective DNS, along with other cyber defensive services, should be scaled up to national-level implementation. Congress needs to mandate funding for CISA to deploy Protective DNS to every state, local, territorial, and tribal (SLTT) government by default, all hospitals that qualify for Medicare or Medicaid payment, all water utilities serving more than a certain customer base, and any organization opting into Protective DNS. An email-checking service similar to NCSC's Mail Check needs to be deployed, mandating DMARC, SPF, and DKIM enforcement on any domain used by a federally-regulated entity.</p>
  </div></section>
 
  <section class="s" id="r6"><div class="si">
  <div class="tag">06</div>
  <h2>Legislate the Vulnerabilities Equities Process</h2>
-
- <h3>What the case studies showed</h3>
- <p>The WannaCry ransomware was possible due to the discovery of the EternalBlue SMB vulnerability by the NSA, which did not inform Microsoft but chose to keep it as a weapon instead. Later, the Shadow Brokers released these vulnerabilities to the public, rendering them vulnerable to attacks. The result of such an attack was the cancellation of appointments for 19,000 patients of the National Health Service, the disruption of several hospitals in more than ten countries, and economic losses amounting to billions of dollars worldwide. The problem here is that all along, there was a solution to the issue.</p>
 
  <h3>What the gap is</h3>
  <p>The Vulnerability Equities Policy is the internal process through which the U.S. government determines how to handle the decision-making process regarding whether any new discovery of vulnerabilities should either be disclosed to the vendor or withheld for offensive uses. The <em class="ref">VEP Charter</em> was released in November 2017, half a year following the WannaCry incident, officially adopting the policy as executive policy. The process features an Equities Review Board, headed by an official at the National Security Council level, comprised of various agency representatives, including NSA, CIA, FBI, DHS, State, Treasury, Commerce, DOD, DOE, ODNI, and OMB.</p>
@@ -643,7 +777,6 @@ img{max-width:100%;display:block}
 
  <h3>What should change</h3>
  <p>VEP process should be codified into law via amending the <em class="ref">National Security Act of 1947</em> or its equivalent. Critical considerations would be: (1) statutory default in favor of disclosure where retention is an exception; (2) enumerated criteria that need to be taken into account, such as extent of vulnerability in terms of critical U.S. infrastructure, potential harm to the nation and its citizens from discovery by adversaries (as demonstrated by the WannaCry attacks), likely lifespan until independent discovery of the vulnerability and whether there are other offensive options available; (3) oversight body, which may take the form of an inspector general with cybersecurity expertise or a dedicated sub-committee for intelligence oversight within the Congress; (4) mandated disclosure to affected vendors based on set timelines if retention criteria have not been satisfied; (5) periodic public reporting of aggregate data (numbers of vulnerabilities examined, number released to vendors, average turnaround for disclosure).</p>
- <p>The reason that should not be dismissed when it comes to not legislating the VEP is that it will hinder the intelligence community from conducting its activities and reduce its ability to go on the offensive. This should be considered as a serious point. On the other hand, the case for legislation of the VEP is because the current approach, which relies only on the executive policies, resulted in the WannaCry incident. Over time, the value of the offensive capability decreases since the operating systems become upgraded and patches spread. At the same time, the defensive risks continue existing while there are still vulnerable systems being operated.</p>
  </div></section>
 
  <div class="band"><p>It should be noted that ransomware is not a natural phenomenon. Ransomware is a consequence of deliberate choices made through policy, which has led to the creation of an ecosystem where ransomware attacks are inexpensive to conduct, expensive to endure, and seldom penalized. Each recommendation presented in this report relates to some deficiency described in the case study analysis. The means are available.</p></div>
